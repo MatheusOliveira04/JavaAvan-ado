@@ -14,22 +14,19 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode (of = "id")
-@Entity(name = "usuario")
-public class User {
-
-	@Setter
-	@Id
+@EqualsAndHashCode(of = "id")
+@Entity(name = "country")
+public class Country {
+	
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_usuario")
+	@Id
+	@Column(name = "id_country")
+	@Setter
 	private Integer id;
 	
-	@Column(name = "usuario_nome")
+	@Column(name = "name_country", unique = true)
 	private String name;
 	
-	@Column (name = "usuario_email", unique = true)
-	private String email;
-	
-	@Column(name = "usuario_senha")
-	private String password;
+
+
 }

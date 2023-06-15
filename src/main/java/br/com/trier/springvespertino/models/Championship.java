@@ -11,25 +11,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
 @NoArgsConstructor
+@Getter
 @AllArgsConstructor
-@EqualsAndHashCode (of = "id")
-@Entity(name = "usuario")
-public class User {
+@EqualsAndHashCode(of = "id")
+@Entity(name = "championship")
+public class Championship {
 
 	@Setter
-	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_usuario")
+	@Id
+	@Column(name = "id_championship")
 	private Integer id;
 	
-	@Column(name = "usuario_nome")
-	private String name;
+	@Column(name = "description_championship")
+	private String description;
 	
-	@Column (name = "usuario_email", unique = true)
-	private String email;
-	
-	@Column(name = "usuario_senha")
-	private String password;
+	@Column(name = "ano_description")
+	private Integer ano;
 }
