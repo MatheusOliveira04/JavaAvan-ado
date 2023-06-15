@@ -18,31 +18,35 @@ public class DadoResource {
 	public String sorteio(@PathVariable int numeroEscolhido, @RequestParam int quantidadeDado) {
 		String str = "";
 		List<Integer> list = numeroAleatorio(quantidadeDado);
+		int somaNumero = somaNumeroAleatorio(list);
 
-		if (validaNumeroEscolhido(numeroEscolhido, quantidadeDado, list)) {
+		if (validaNumeroEscolhido(numeroEscolhido, quantidadeDado)) {
 
 			for (int i = 0; i < quantidadeDado; i++) {
-				str += numeroAleatorio(quantidadeDado).get(i) + " ";
+				str += list.get(i) + " ";
 			}
-			str += " -> " + comparaNumero(numeroEscolhido, list);
+			str += " -> " + comparaNumero(numeroEscolhido, somaNumero);
 
-			str += porcentagem(numeroEscolhido, list);
+			str +=  " = " +porcentagem(numeroEscolhido, somaNumero) + "% - " + somaNumero;
 		}
 		return str;
 	}
 
-	public boolean validaNumeroEscolhido(int numeroEscolhido, int quantidadeDados, List<Integer> list) {
-		int soma = somaNumeroAleatorio(list);
-		if (numeroEscolhido < quantidadeDados && numeroEscolhido > soma) {
-			return false;
+	public boolean validaNumeroEscolhido(int numeroEscolhido, int quantidadeDados) {
+		if (numeroEscolhido >= quantidadeDados && numeroEscolhido <= quantidadeDados * 12) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 
-	public int porcentagem(int numeroEscolhido, List<Integer> list) {
-		int valorMaximo = somaNumeroAleatorio(list);
-
-		return (valorMaximo / 100) * numeroEscolhido;
+	public double porcentagem(int numeroEscolhido, int soma) {
+		double porcento;
+		if(soma >= numeroEscolhido) {
+		porcento = (100 * numeroEscolhido) / soma;
+		} else {
+			porcento = (100 * soma) / numeroEscolhido;
+		}
+		return porcento;
 	}
 
 	//
@@ -62,11 +66,14 @@ public class DadoResource {
 
 	public Integer somaNumeroAleatorio(List<Integer> list) {
 		Integer soma = 0;
-		return soma += list.stream().mapToInt(Integer::intValue).sum();
+		for (Integer integer : list) {
+			soma += integer;
+		}
+		return soma;
 	}
 
-	public String comparaNumero(int numeroEscolhido, List<Integer> list) {
-		if (numeroEscolhido == somaNumeroAleatorio(list)) {
+	public String comparaNumero(int numeroEscolhido, int soma) {
+		if (numeroEscolhido == soma) {
 			return "Número certo";
 		}
 		return "Número errado";
