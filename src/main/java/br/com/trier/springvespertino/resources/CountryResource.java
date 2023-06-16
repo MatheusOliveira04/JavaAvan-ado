@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import br.com.trier.springvespertino.models.Country;
 import br.com.trier.springvespertino.services.impl.CountryServiceImpl;
 import jakarta.annotation.Resource;
 
-@Resource
-@RequestMapping("/pais")
+@RestController
+@RequestMapping("/country")
 public class CountryResource {
 
 	@Autowired
