@@ -13,39 +13,39 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.trier.springvespertino.models.Championship;
-import br.com.trier.springvespertino.services.ChampionshipService;
+import br.com.trier.springvespertino.models.Team;
+import br.com.trier.springvespertino.services.impl.TeamServiceImpl;
 
 @RestController
-@RequestMapping("/championship")
-public class ChampionshipResource {
-	
+@RequestMapping("/team")
+public class TeamResource {
+
 	@Autowired
-	ChampionshipService service;
+	TeamServiceImpl service;
 	
 	@PostMapping
-	public ResponseEntity<Championship> insert(@RequestBody Championship champ){
-		Championship c = service.insert(champ);
-		return c != null ? ResponseEntity.ok(c) : ResponseEntity.noContent().build(); 
+	public ResponseEntity<Team> insert(@RequestBody Team team){
+		Team newTeam = service.insert(team);
+		return newTeam != null ? ResponseEntity.ok(newTeam) : ResponseEntity.noContent().build();
 	}
-
+	
 	@GetMapping("/{id}")
-	public ResponseEntity<Championship> findById(@PathVariable Integer id){
-		Championship c = service.findById(id);
-		return c != null ? ResponseEntity.ok(c) : ResponseEntity.noContent().build();
+	public ResponseEntity<Team> findById(@PathVariable Integer id){
+		Team newTeam = service.findById(id);
+		return newTeam != null ? ResponseEntity.ok(newTeam) : ResponseEntity.noContent().build();
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<Championship>> findAll(){
-		List<Championship> list = service.findAll();
+	public ResponseEntity<List<Team>> findAll(){
+		List<Team> list = service.findAll();
 		return list.size() > 0 ? ResponseEntity.ok(list) : ResponseEntity.noContent().build();
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Championship> update(@PathVariable Integer id, @RequestBody Championship c){
-		c.setId(id);
-		Championship champ = service.update(c);
-		return champ != null ? ResponseEntity.ok(champ) : ResponseEntity.noContent().build();
+	public ResponseEntity<Team> update(@PathVariable Integer id, @RequestBody Team team){
+		team.setId(id);
+		Team newTeam = service.update(team);
+		return newTeam != null ? ResponseEntity.ok(newTeam) : ResponseEntity.noContent().build();
 	}
 	
 	@DeleteMapping("/{id}")

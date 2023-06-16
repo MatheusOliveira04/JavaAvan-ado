@@ -35,6 +35,12 @@ public class UserResource {
 		return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
 	}
 	
+	@GetMapping("/name/{name}")
+	public ResponseEntity<List<User>> findByName(@PathVariable String name){
+		List<User> listUser = service.findBynameStartingWithIgnoreCase(name);
+		return listUser.size() > 0 ? ResponseEntity.ok(listUser) : ResponseEntity.noContent().build();
+	}
+	
 	@GetMapping
 	public ResponseEntity<List<User>> listAll(){
 		List<User> listUser = service.listAll();

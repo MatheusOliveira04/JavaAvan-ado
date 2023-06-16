@@ -11,22 +11,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@EqualsAndHashCode
 @NoArgsConstructor
-@Getter
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
-@Entity(name = "championship")
-public class Championship {
+@Getter
+@Entity(name = "team")
+public class Team {
 
 	@Setter
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
-	@Column(name = "id_championship")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_team")
 	private Integer id;
 	
-	@Column(name = "description_championship")
-	private String description;
-	
-	@Column(name = "year_description")
-	private Integer year;
+	@Column(name = "name_team", unique = true)
+	private String name;
 }
