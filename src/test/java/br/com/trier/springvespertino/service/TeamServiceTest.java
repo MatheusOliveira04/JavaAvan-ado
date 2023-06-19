@@ -97,4 +97,21 @@ public class TeamServiceTest extends BaseTests{
 		assertEquals(2, list.size());
 	}
 	
+	@Test
+	@DisplayName("Teste buscar por nome")
+	@Sql({"classpath:/resources/sqls/team.sql"})
+	void findByNameTest() {
+		var team = service.findByNameIgnoreCase("EQUIPE 3");
+		assertNotNull(team);
+		assertEquals("Equipe 3", team.getName());
+		assertEquals(1, team.getId());
+	}
+
+	@Test
+	@DisplayName("Teste buscar por nome que não existe")
+	@Sql({"classpath:/resources/sqls/team.sql"})
+	void findByNameNonExistTest() {
+		var team = service.findByNameIgnoreCase("EQUIPE");
+		assertNull(team);
+	}
 }

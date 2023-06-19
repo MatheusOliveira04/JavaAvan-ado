@@ -41,6 +41,12 @@ public class TeamResource {
 		return list.size() > 0 ? ResponseEntity.ok(list) : ResponseEntity.noContent().build();
 	}
 	
+	@GetMapping("/name/{name}")
+	public ResponseEntity<Team> findByNameIgnoreCase(@PathVariable String name){
+		Team team = service.findByNameIgnoreCase(name);
+		return team != null ? ResponseEntity.ok(team) : ResponseEntity.noContent().build();
+	}
+	
 	@PutMapping("/{id}")
 	public ResponseEntity<Team> update(@PathVariable Integer id, @RequestBody Team team){
 		team.setId(id);

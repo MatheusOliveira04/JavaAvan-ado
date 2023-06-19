@@ -7,5 +7,7 @@ import br.com.trier.springvespertino.models.Team;
 
 @Repository
 public interface TeamRepository extends JpaRepository<Team, Integer>{
+	
+	Team findByNameIgnoreCase(String name);
 
 }

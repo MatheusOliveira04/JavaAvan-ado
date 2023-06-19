@@ -45,4 +45,10 @@ public class TeamServiceImpl implements TeamService{
 			repository.delete(team);
 		}
 	}
+
+	@Override
+	public Team findByNameIgnoreCase(String name) {
+		Team team = repository.findByNameIgnoreCase(name);
+		return team;
+	}
 }

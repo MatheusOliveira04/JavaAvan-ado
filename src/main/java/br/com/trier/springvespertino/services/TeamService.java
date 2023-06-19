@@ -15,4 +15,6 @@ public interface TeamService {
 	Team update(Team team);
 	
 	void delete(Integer id);
+	
+	Team findByNameIgnoreCase(String name);
 }

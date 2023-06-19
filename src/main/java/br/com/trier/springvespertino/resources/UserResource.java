@@ -32,26 +32,23 @@ public class UserResource {
 	@GetMapping("/{id}")
 	public ResponseEntity<User> findById(@PathVariable Integer id){
 		User user = service.findById(id);
-		return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
+		return ResponseEntity.ok(user);
 	}
 	
 	@GetMapping("/name/{name}")
 	public ResponseEntity<List<User>> findByName(@PathVariable String name){
-		List<User> listUser = service.findBynameStartingWithIgnoreCase(name);
-		return listUser.size() > 0 ? ResponseEntity.ok(listUser) : ResponseEntity.noContent().build();
+		return ResponseEntity.ok(service.findBynameStartingWithIgnoreCase(name));
 	}
 	
 	@GetMapping
 	public ResponseEntity<List<User>> listAll(){
-		List<User> listUser = service.listAll();
-		return listUser.size() > 0 ? ResponseEntity.ok(listUser) : ResponseEntity.noContent().build();
+		return ResponseEntity.ok(service.listAll());
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<User> update(@PathVariable Integer id, @RequestBody User user){
 		user.setId(id);
-		user = service.update(user);
-		return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
+		return ResponseEntity.ok(service.update(user));
 	}
 	
 	@DeleteMapping("/{id}")

@@ -31,21 +31,18 @@ public class ChampionshipResource {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Championship> findById(@PathVariable Integer id){
-		Championship c = service.findById(id);
-		return c != null ? ResponseEntity.ok(c) : ResponseEntity.noContent().build();
+		return ResponseEntity.ok(service.findById(id));
 	}
 	
 	@GetMapping
 	public ResponseEntity<List<Championship>> findAll(){
-		List<Championship> list = service.findAll();
-		return list.size() > 0 ? ResponseEntity.ok(list) : ResponseEntity.noContent().build();
+		return ResponseEntity.ok(service.findAll());
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Championship> update(@PathVariable Integer id, @RequestBody Championship c){
 		c.setId(id);
-		Championship champ = service.update(c);
-		return champ != null ? ResponseEntity.ok(champ) : ResponseEntity.noContent().build();
+		return ResponseEntity.ok(service.update(c));
 	}
 	
 	@DeleteMapping("/{id}")
@@ -55,9 +52,7 @@ public class ChampionshipResource {
 	}
 	
 	@GetMapping("/year/between/{yearBefore}/{yearAfter}")
-	public ResponseEntity<List<Championship>> findByBetweenYear(
-			@PathVariable Integer yearBefore, @PathVariable Integer yearAfter){
-		List<Championship> list = service.findByYearBetween(yearBefore, yearAfter);
-		return list.size() > 0 ? ResponseEntity.ok(list) : ResponseEntity.noContent().build();
+	public ResponseEntity<List<Championship>> findByBetweenYear(@PathVariable Integer yearBefore, @PathVariable Integer yearAfter){
+		return ResponseEntity.ok(service.findByYearBetween(yearBefore, yearAfter));
 	}
 }

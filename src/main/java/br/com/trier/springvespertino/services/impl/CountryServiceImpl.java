@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import br.com.trier.springvespertino.models.Country;
 import br.com.trier.springvespertino.repositories.CountryRepository;
 import br.com.trier.springvespertino.services.CountryService;
+import br.com.trier.springvespertino.services.exceptions.IntegrityViolation;
+import br.com.trier.springvespertino.services.exceptions.ObjectNotFound;
 
 @Service
 public class CountryServiceImpl implements CountryService{
@@ -16,40 +18,54 @@ public class CountryServiceImpl implements CountryService{
 	@Autowired
 	private CountryRepository repository;
 	
+	private void nameIsUnique(Country country) {
+		Country busca = repository.findByNameIgnoreCase(country.getName());
+		if(busca != null && busca.getId() != country.getId()) {
+			throw new IntegrityViolation("Nome %s já existe".formatted(country.getName()));
+		}
+	}
+	
 	@Override
 	public Country findById(Integer id) {
 		Optional<Country> country = repository.findById(id);
-		return country.orElse(null);
+		return country.orElseThrow(() -> new ObjectNotFound("id: %s não encontrado".formatted(id)));
 	}
 
 	@Override
 	public List<Country> findAll() {
 		List<Country> list = repository.findAll();
+		if(list.isEmpty()) {
+			throw new ObjectNotFound("Nenhum Country encontrado");
+		}
 		return list;
 	}
 
 	@Override
 	public Country insert(Country country) {
+		nameIsUnique(country);
 		return repository.save(country);
 	}
 
 	@Override
 	public Country update(Country country) {
-		Country newCountry = repository.save(country);
-		return newCountry;
+		findById(country.getId());
+		nameIsUnique(country);
+		return repository.save(country);
 	}
 
 	@Override
 	public void delete(Integer id) {
-		Country newCountry = findById(id);
-		if(newCountry != null) {
-		repository.delete(newCountry);
+		Country c = findById(id);
+		repository.delete(c);
 		}
-	}
+	
 
 	@Override
 	public List<Country> findByNameContainingIgnoreCase(String countains) {
 		List<Country> list = repository.findByNameContainingIgnoreCase(countains);
+		if(list.isEmpty()) {
+			throw new ObjectNotFound("Nenhum Country encontrado");
+		}
 		return list;
 	}
 

@@ -3,6 +3,7 @@ package br.com.trier.springvespertino.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 
@@ -14,10 +15,12 @@ import org.springframework.test.context.jdbc.Sql;
 import br.com.trier.springvespertino.BaseTests;
 import br.com.trier.springvespertino.models.Championship;
 import br.com.trier.springvespertino.services.ChampionshipService;
+import br.com.trier.springvespertino.services.exceptions.IntegrityViolation;
+import br.com.trier.springvespertino.services.exceptions.ObjectNotFound;
 import jakarta.transaction.Transactional;
 
 @Transactional
-public class ChampionshipTest extends BaseTests{
+public class ChampionshipSericeTest extends BaseTests{
 
 	@Autowired
 	ChampionshipService service;
@@ -37,8 +40,8 @@ public class ChampionshipTest extends BaseTests{
 	@DisplayName("Teste buscar id não existente")
 	@Sql({"classpath:/resources/sqls/championship.sql"})
 	void findByIdNonExistTest() {
-		Championship champ = service.findById(10);
-		assertNull(champ);
+		var exception = assertThrows(ObjectNotFound.class, () -> service.findById(10));
+		assertEquals("id: 10 não encontrado", exception.getMessage());
 	}
 	
 	@Test
@@ -50,15 +53,30 @@ public class ChampionshipTest extends BaseTests{
 	}
 	
 	@Test
+	@DisplayName("Teste listar todos Championship sem cadastro")
+	void listAllEmptyTest() {
+		var exception = assertThrows(ObjectNotFound.class, () -> service.findAll());
+		assertEquals("Nenhum Championship encontrado", exception.getMessage());
+	}
+	
+	@Test
 	@DisplayName("Teste inserir Championship")
 	void insertTest() {
-		Championship champ = new Championship(null, "insert", 1000);
+		Championship champ = new Championship(1, "insert", 2000);
 		service.insert(champ);
 		champ = service.findById(1);
 		assertNotNull(champ);
 		assertEquals(1, champ.getId());
 		assertEquals("insert",champ.getDescription());
-		assertEquals(1000, champ.getYear());
+		assertEquals(2000, champ.getYear());
+	}
+	
+	@Test
+	@DisplayName("Teste inserir Championship com ano inválido")
+	void insertYearInvalidTest() {
+		Championship c = new Championship(1, "insert",1000);
+		var exception = assertThrows(IntegrityViolation.class, () -> service.insert(c));
+		assertEquals("Ano inválido, deve ser entre 1990 e 2024", exception.getMessage());
 	}
 	
 	@Test
@@ -79,6 +97,24 @@ public class ChampionshipTest extends BaseTests{
 	}
 	
 	@Test
+	@DisplayName("Teste atualizar Championship id não encontrado")
+	@Sql({"classpath:/resources/sqls/championship.sql"})
+	void updateIdNotFoundTest() {
+		Championship c = new Championship(10, "update", 2000);
+		var exception = assertThrows(ObjectNotFound.class, () -> service.update(c));
+		assertEquals("id: 10 não encontrado", exception.getMessage());
+	}
+	
+	@Test
+	@DisplayName("Teste atualizar Championship com ano inválido")
+	@Sql({"classpath:/resources/sqls/championship.sql"})
+	void updateYearInvalidTest() {
+		Championship c = new Championship(1, "update", 1000);
+		var exception = assertThrows(IntegrityViolation.class,() -> service.update(c));
+		assertEquals("Ano inválido, deve ser entre 1990 e 2024", exception.getMessage());
+	}
+	
+	@Test
 	@DisplayName("Teste deletar Championship")
 	@Sql({"classpath:/resources/sqls/championship.sql"})
 	void deleteTest() {
@@ -90,6 +126,14 @@ public class ChampionshipTest extends BaseTests{
 		service.delete(champ.getId());
 		list = service.findAll();
 		assertEquals(1, list.size());
+	}
+	
+	@Test
+	@DisplayName("Teste deletar Championship id não encontrado")
+	@Sql({"classpath:/resources/sqls/championship.sql"})
+	void deleteIdNotFoundTest() {
+		var exception = assertThrows(ObjectNotFound.class,() -> service.delete(10));
+		assertEquals("id: 10 não encontrado", exception.getMessage());
 	}
 	
 	@Test

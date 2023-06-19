@@ -3,6 +3,7 @@ package br.com.trier.springvespertino.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 
@@ -14,6 +15,8 @@ import org.springframework.test.context.jdbc.Sql;
 import br.com.trier.springvespertino.BaseTests;
 import br.com.trier.springvespertino.models.Country;
 import br.com.trier.springvespertino.services.CountryService;
+import br.com.trier.springvespertino.services.exceptions.IntegrityViolation;
+import br.com.trier.springvespertino.services.exceptions.ObjectNotFound;
 import jakarta.transaction.Transactional;
 
 @Transactional
@@ -36,8 +39,8 @@ public class CountryServiceTest extends BaseTests{
 	@DisplayName("Teste buscar id não existe")
 	@Sql({"classpath:/resources/sqls/country.sql"})
 	void findByIdNonExist() {
-		var c = service.findById(10);
-		assertNull(c);
+		var exception = assertThrows(ObjectNotFound.class,() -> service.findById(10));
+		assertEquals("id: 10 não encontrado", exception.getMessage());
 	}
 	
 	@Test
@@ -46,6 +49,13 @@ public class CountryServiceTest extends BaseTests{
 	void listAll() {
 		List<Country> list = service.findAll();
 		assertEquals(2, list.size());
+	}
+	
+	@Test
+	@DisplayName("Teste buscar todos Country sem cadastro")
+	void listAllEmptyTest() {
+		var exception = assertThrows(ObjectNotFound.class, () -> service.findAll());
+			assertEquals("Nenhum Country encontrado", exception.getMessage());
 	}
 	
 	@Test
@@ -60,6 +70,15 @@ public class CountryServiceTest extends BaseTests{
 		assertNotNull(c);
 		assertEquals(1, c.getId());
 		assertEquals("Argentina", c.getName());
+	}
+	
+	@Test
+	@DisplayName("Teste inserir nome duplicado")
+	@Sql({"classpath:/resources/sqls/country.sql"})
+	void insertNameAlreadyExistTest() {
+		Country c = new Country(3,"Brazil");
+		var exception = assertThrows(IntegrityViolation.class, () -> service.insert(c));
+		assertEquals("Nome Brazil já existe", exception.getMessage());
 	}
 	
 	@Test
@@ -78,6 +97,10 @@ public class CountryServiceTest extends BaseTests{
 		assertEquals("update", c.getName());
 	}
 	
+	//Teste atualiza nome duplicado
+	
+	//Teste atualiza id não encontrado
+	
 	@Test
 	@DisplayName("Teste deletar Country existente")
 	@Sql({"classpath:/resources/sqls/country.sql"})
@@ -94,22 +117,25 @@ public class CountryServiceTest extends BaseTests{
 	@DisplayName("Teste deletar id não existe")
 	@Sql({"classpath:/resources/sqls/country.sql"})
 	void deleteNonExistTest() {
-		List<Country> list = service.findAll();
-		assertEquals(2, list.size());
-		service.delete(10);
-		list = service.findAll();
-		assertEquals(2, list.size());
+		var exception = assertThrows(ObjectNotFound.class, () -> service.delete(10));
+		assertEquals("id: 10 não encontrado", exception.getMessage());
 	}
 	
 	@Test
-	@DisplayName("Teste buscar por nome")
+	@DisplayName("Teste contém no nome")
 	@Sql({"classpath:/resources/sqls/country.sql"})
-	void findByNameTest() {
+	void findByNameContainsTest() {
 		List<Country> list = service.findByNameContainingIgnoreCase("A");
 		assertEquals(2, list.size());
 		list = service.findByNameContainingIgnoreCase("Z");
 		assertEquals(1, list.size());
-		list = service.findByNameContainingIgnoreCase("G");
-		assertEquals(0, list.size());
+	}
+	
+	@Test
+	@DisplayName("Teste não contém no nome")
+	@Sql({"classpath:/resources/sqls/country.sql"})
+	void findByNameNonContainsTest() {
+	 var exception = assertThrows(ObjectNotFound.class,() -> service.findByNameContainingIgnoreCase("G"));
+	 assertEquals("Nenhum Country encontrado", exception.getMessage());
 	}
 }

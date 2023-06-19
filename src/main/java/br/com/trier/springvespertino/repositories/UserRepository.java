@@ -11,4 +11,5 @@ import br.com.trier.springvespertino.models.User;
 public interface UserRepository extends JpaRepository<User, Integer>{
 	
 	List<User> findBynameStartingWithIgnoreCase(String name);
+	User findByEmail(String email);
 }
