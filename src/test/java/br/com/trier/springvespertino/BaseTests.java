@@ -35,7 +35,7 @@ public class BaseTests {
 		}
 	
 	@Bean
-	public TeamService teamSerevice() {
+	public TeamService teamService() {
 		return new TeamServiceImpl();
 	}
 }
