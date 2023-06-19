@@ -53,4 +53,11 @@ public class ChampionshipResource {
 		service.delete(id);
 		return ResponseEntity.ok().build();
 	}
+	
+	@GetMapping("/year/between/{yearBefore}/{yearAfter}")
+	public ResponseEntity<List<Championship>> findByBetweenYear(
+			@PathVariable Integer yearBefore, @PathVariable Integer yearAfter){
+		List<Championship> list = service.findByYearBetween(yearBefore, yearAfter);
+		return list.size() > 0 ? ResponseEntity.ok(list) : ResponseEntity.noContent().build();
+	}
 }

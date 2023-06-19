@@ -46,4 +46,10 @@ public class ChampionshipServiceImpl implements ChampionshipService{
 		}
 	}
 
+	@Override
+	public List<Championship> findByYearBetween(Integer yearBefore, Integer yearAfter) {
+		List<Championship> list = repository.findByYearBetween(yearBefore, yearAfter);
+		return list;
+	}
+
 }

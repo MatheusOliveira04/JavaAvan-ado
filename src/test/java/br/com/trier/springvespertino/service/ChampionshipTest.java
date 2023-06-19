@@ -91,4 +91,16 @@ public class ChampionshipTest extends BaseTests{
 		list = service.findAll();
 		assertEquals(1, list.size());
 	}
+	
+	@Test
+	@DisplayName("Teste buscar por ano")
+	@Sql({"classpath:/resources/sqls/championship.sql"})
+	void findByYearTest() {
+		List<Championship> list = service.findByYearBetween(2024, 2028);
+		assertEquals(1, list.size());
+		var c = list.get(0);
+		assertEquals(1, c.getId());
+		assertEquals(2024, c.getYear());
+		assertEquals("World Cup", c.getDescription());
+	}
 }

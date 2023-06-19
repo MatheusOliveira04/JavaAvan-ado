@@ -36,6 +36,13 @@ public class CountryResource {
 		return list.size() > 0 ? ResponseEntity.ok(list) : ResponseEntity.noContent().build();
 	}
 	
+	@GetMapping("/nameContain/{contains}")
+	public ResponseEntity<List<Country>> findByNameContainingIgnoreCase(
+			@PathVariable String contains) {
+		List<Country> list = service.findByNameContainingIgnoreCase(contains);
+		return list.size() > 0 ? ResponseEntity.ok(list) : ResponseEntity.noContent().build();
+	}
+	
 	@PostMapping
 	public ResponseEntity<Country> insert(@RequestBody Country country){
 		Country newCountry = service.insert(country);

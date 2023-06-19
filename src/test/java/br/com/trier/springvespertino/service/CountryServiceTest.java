@@ -100,4 +100,16 @@ public class CountryServiceTest extends BaseTests{
 		list = service.findAll();
 		assertEquals(2, list.size());
 	}
+	
+	@Test
+	@DisplayName("Teste buscar por nome")
+	@Sql({"classpath:/resources/sqls/country.sql"})
+	void findByNameTest() {
+		List<Country> list = service.findByNameContainingIgnoreCase("A");
+		assertEquals(2, list.size());
+		list = service.findByNameContainingIgnoreCase("Z");
+		assertEquals(1, list.size());
+		list = service.findByNameContainingIgnoreCase("G");
+		assertEquals(0, list.size());
+	}
 }

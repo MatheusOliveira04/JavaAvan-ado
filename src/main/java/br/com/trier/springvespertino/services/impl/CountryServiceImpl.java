@@ -47,5 +47,11 @@ public class CountryServiceImpl implements CountryService{
 		}
 	}
 
+	@Override
+	public List<Country> findByNameContainingIgnoreCase(String countains) {
+		List<Country> list = repository.findByNameContainingIgnoreCase(countains);
+		return list;
+	}
+
 	
 }

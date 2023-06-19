@@ -15,4 +15,6 @@ public interface CountryService {
 	Country update(Country country);
 	
 	void delete(Integer id);
+	
+	List<Country> findByNameContainingIgnoreCase(String countains);
 }

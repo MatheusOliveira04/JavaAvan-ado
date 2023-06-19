@@ -96,4 +96,5 @@ public class TeamServiceTest extends BaseTests{
 		list = service.findAll();
 		assertEquals(2, list.size());
 	}
+	
 }

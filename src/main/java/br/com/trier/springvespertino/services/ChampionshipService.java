@@ -15,4 +15,6 @@ public interface ChampionshipService {
 	Championship update(Championship championship);
 	
 	void delete(Integer id);
+	
+	List<Championship> findByYearBetween(Integer yearBefore, Integer yearAfter); 
 }
