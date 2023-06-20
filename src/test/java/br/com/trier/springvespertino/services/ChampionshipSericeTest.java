@@ -1,4 +1,4 @@
-package br.com.trier.springvespertino.service;
+package br.com.trier.springvespertino.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -77,6 +77,14 @@ public class ChampionshipSericeTest extends BaseTests{
 		Championship c = new Championship(1, "insert",1000);
 		var exception = assertThrows(IntegrityViolation.class, () -> service.insert(c));
 		assertEquals("Ano inválido, deve ser entre 1990 e 2024", exception.getMessage());
+	}
+	
+	@Test
+	@DisplayName("Teste inserir Championship com ano null")
+	void insertYearNullTest() {
+		Championship c = new Championship(1, "insert",null);
+		var exception = assertThrows(IntegrityViolation.class, () -> service.insert(c));
+		assertEquals("Ano não pode ser nulo", exception.getMessage());
 	}
 	
 	@Test

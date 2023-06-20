@@ -1,6 +1,5 @@
-package br.com.trier.springvespertino.service;
+package br.com.trier.springvespertino.services;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;

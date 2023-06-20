@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.trier.springvespertino.models.User;
+import br.com.trier.springvespertino.models.dto.UserDTO;
 import br.com.trier.springvespertino.services.impl.UserServiceImpl;
 
 @RestController
@@ -24,31 +25,31 @@ public class UserResource {
 	private UserServiceImpl service;
 	
 	@PostMapping
-	public ResponseEntity<User> insert(@RequestBody User user) {
-		User newUser = service.insert(user);
-		return newUser != null ? ResponseEntity.ok(newUser) : ResponseEntity.noContent().build();
+	public ResponseEntity<UserDTO> insert(@RequestBody UserDTO user) {
+		return ResponseEntity.ok(service.insert(new User(user)).toDto());
 		}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<User> findById(@PathVariable Integer id){
-		User user = service.findById(id);
-		return ResponseEntity.ok(user);
+	public ResponseEntity<UserDTO> findById(@PathVariable Integer id){
+		return ResponseEntity.ok(service.findById(id).toDto());
 	}
 	
 	@GetMapping("/name/{name}")
-	public ResponseEntity<List<User>> findByName(@PathVariable String name){
-		return ResponseEntity.ok(service.findBynameStartingWithIgnoreCase(name));
+	public ResponseEntity<List<UserDTO>> findByName(@PathVariable String name){
+		return ResponseEntity.ok(service.findBynameStartingWithIgnoreCase(name)
+				.stream().map((user) -> user.toDto()).toList());
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<User>> listAll(){
-		return ResponseEntity.ok(service.listAll());
+	public ResponseEntity<List<UserDTO>> listAll(){
+		return ResponseEntity.ok(service.listAll().stream().map((user) -> user.toDto()).toList());
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<User> update(@PathVariable Integer id, @RequestBody User user){
+	public ResponseEntity<UserDTO> update(@PathVariable Integer id, @RequestBody UserDTO userDto){
+		User user = new User(userDto);
 		user.setId(id);
-		return ResponseEntity.ok(service.update(user));
+		return ResponseEntity.ok(service.update(user).toDto());
 	}
 	
 	@DeleteMapping("/{id}")
