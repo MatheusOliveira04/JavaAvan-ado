@@ -97,9 +97,23 @@ public class CountryServiceTest extends BaseTests{
 		assertEquals("update", c.getName());
 	}
 	
-	//Teste atualiza nome duplicado
+	@Test
+	@DisplayName("Teste atualiza nome duplicado")
+	@Sql({"classpath:/resources/sqls/country.sql"})
+	void updateDoubleNameTest() {
+		Country c = new Country(2, "Brazil");
+		var exception = assertThrows(IntegrityViolation.class, () -> service.update(c));
+		assertEquals("Nome Brazil já existe", exception.getMessage());
+	}
 	
-	//Teste atualiza id não encontrado
+	@Test
+	@DisplayName("Teste atualiza id não encontrado")
+	@Sql({"classpath:/resources/sqls/country.sql"})
+	void updateIdNonExist() {
+		Country c = new Country(10, "Update");
+		var exception = assertThrows(ObjectNotFound.class,() -> service.update(c));
+		assertEquals("id: 10 não encontrado", exception.getMessage());
+	}
 	
 	@Test
 	@DisplayName("Teste deletar Country existente")
