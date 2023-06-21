@@ -2,8 +2,7 @@ package br.com.trier.springvespertino.resrouces;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
@@ -44,7 +43,7 @@ public class ChampionshipResourceTest {
 	@Test
 	@DisplayName("Busca por id")
 	void findByIdTest() {
-		ResponseEntity<Championship> re = rest.getForEntity("/championship/1",Championship.class);
+		ResponseEntity<Championship> re = getChampionship("/championship/1");
 		assertEquals(re.getStatusCode(), HttpStatus.OK);
 		Championship cTest = re.getBody();
 		assertEquals(1, cTest.getId());	
@@ -58,17 +57,16 @@ public class ChampionshipResourceTest {
 	}
 	
 	@Test
-	@DisplayName("Listar todos")
+	@DisplayName("listar todos")
 	void listAllTest() {
-		List<Championship> list = new ArrayList<>();
-		ResponseEntity<List<Championship>> c = rest.exchange("/championship", HttpMethod.GET,
+		ResponseEntity<List<Championship>> re = rest.exchange("/championship", HttpMethod.GET,
 				null, new ParameterizedTypeReference<List<Championship>>() {});
-		assertEquals(c.getStatusCode(), HttpStatus.OK);
+		assertEquals(re.getStatusCode(), HttpStatus.OK);
 	}
 	
 	@Test
 	@DisplayName("Teste inserir Championship")
-	@Sql(executionPhase = ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:/resources/sqls/limpa_tabelas.sql")
+	@Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:/resources/sqls/limpa_tabelas.sql")
 	void insertTest() {
 		var c = new Championship(1, "insert", 2000);
 		HttpHeaders headers = new HttpHeaders();
@@ -80,6 +78,32 @@ public class ChampionshipResourceTest {
 		c = null;
 		c = re.getBody();
 		assertEquals("insert", c.getDescription());
+	}
+	
+	@Test
+	@DisplayName("Teste inserir id year nulo")
+	@Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:/resources/sqls/limpa_tabelas.sql")
+	void insertYearNull() {
+	var c = new Championship(1, "insert", null);
+	HttpHeaders header = new HttpHeaders();
+	header.setContentType(MediaType.APPLICATION_JSON);
+	HttpEntity<Championship> he = new HttpEntity<>(c, header);
+	ResponseEntity<Championship> re = rest.exchange("/championship", HttpMethod.POST, 
+			he, Championship.class);
+	assertEquals(re.getStatusCode(), HttpStatus.BAD_REQUEST);
+	}
+	
+	@Test
+	@DisplayName("Teste inserir Championship year inválido")
+	@Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:/resources/sqls/limpa_tabelas.sql")
+	void insertInvalidYear() {
+		var c = new Championship(1, "insert", 100);
+		HttpHeaders header = new HttpHeaders();
+		header.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<Championship> he = new HttpEntity<>(c, header);
+		ResponseEntity<Championship> re = rest.exchange("/championship", HttpMethod.POST,
+				he, Championship.class);
+		assertEquals(re.getStatusCode(), HttpStatus.BAD_REQUEST);
 	}
 	
 	@Test
@@ -96,11 +120,51 @@ public class ChampionshipResourceTest {
 	}
 	
 	@Test
+	@DisplayName("Teste atualiza Championship id não existe")
+	void updateIdNotFound() {
+		var c = new Championship(null, "update", 2000);
+		HttpHeaders header = new HttpHeaders();
+		header.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<Championship> he = new HttpEntity<>(c, header);
+		ResponseEntity<Championship> re = rest.exchange("/championship/10", HttpMethod.PUT,
+				he, Championship.class);
+		assertEquals(re.getStatusCode(), HttpStatus.NOT_FOUND);
+	}
+	
+	@Test
+	@DisplayName("Teste atualiza Championship year invalido")
+	@Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:/resources/sqls/championship.sql")
+	void updateInvalidYear() {
+		var c = new Championship(1, "update", 1000);
+		HttpHeaders header = new HttpHeaders();
+		header.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<Championship> he = new HttpEntity<>(c, header);
+		ResponseEntity<Championship> re = rest.exchange("/championship/1", HttpMethod.PUT,
+				he, Championship.class);
+		assertEquals(re.getStatusCode(), HttpStatus.BAD_REQUEST);
+	}
+	
+	@Test
 	@DisplayName("Teste deletar")
 	void deleteTest() {
 		ResponseEntity<Void> re = rest.exchange("/championship/1", HttpMethod.DELETE,
 				null, Void.class);
 		assertEquals(re.getStatusCode(), HttpStatus.OK);
-		
+	}
+	
+	@Test
+	@DisplayName("Teste deletar id não existe")
+	void delteIdNotFound() {
+		ResponseEntity<Void> re = rest.exchange("/championship/10", HttpMethod.DELETE,
+				null, Void.class);
+		assertEquals(re.getStatusCode(), HttpStatus.NOT_FOUND);
+	}
+	
+	@Test
+	@DisplayName("Teste buscar entre anos")
+	void findByYearBetween() {
+		ResponseEntity<List<Championship>> re = rest.exchange("/championship/year/between/2024/2025"
+				, HttpMethod.GET, null, new ParameterizedTypeReference<List<Championship>>() {});
+		assertEquals(re.getStatusCode(), HttpStatus.OK);
 	}
 }
