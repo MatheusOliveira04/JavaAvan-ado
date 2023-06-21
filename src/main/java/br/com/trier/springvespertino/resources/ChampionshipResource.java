@@ -26,7 +26,7 @@ public class ChampionshipResource {
 	@PostMapping
 	public ResponseEntity<Championship> insert(@RequestBody Championship champ){
 		Championship c = service.insert(champ);
-		return c != null ? ResponseEntity.ok(c) : ResponseEntity.noContent().build(); 
+		return ResponseEntity.ok(c); 
 	}
 
 	@GetMapping("/{id}")

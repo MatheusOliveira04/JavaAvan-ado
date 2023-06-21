@@ -65,6 +65,14 @@ public class ChampionshipResourceTest {
 	}
 	
 	@Test
+	@DisplayName("listar todos nenhum cadastro")
+	@Sql({"classpath:/resources/sqls/limpa_tabelas.sql"})
+	void listAllEmptyTest() {
+		ResponseEntity<Championship> re = getChampionship("/championship");
+		assertEquals(re.getStatusCode(), HttpStatus.NOT_FOUND);
+	}
+	
+	@Test
 	@DisplayName("Teste inserir Championship")
 	@Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:/resources/sqls/limpa_tabelas.sql")
 	void insertTest() {

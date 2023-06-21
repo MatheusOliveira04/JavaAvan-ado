@@ -7,10 +7,12 @@ import org.springframework.test.context.ActiveProfiles;
 
 import br.com.trier.springvespertino.services.ChampionshipService;
 import br.com.trier.springvespertino.services.CountryService;
+import br.com.trier.springvespertino.services.SpeedwayService;
 import br.com.trier.springvespertino.services.TeamService;
 import br.com.trier.springvespertino.services.UserService;
 import br.com.trier.springvespertino.services.impl.ChampionshipServiceImpl;
 import br.com.trier.springvespertino.services.impl.CountryServiceImpl;
+import br.com.trier.springvespertino.services.impl.SpeedwaySerivceImpl;
 import br.com.trier.springvespertino.services.impl.TeamServiceImpl;
 import br.com.trier.springvespertino.services.impl.UserServiceImpl;
 
@@ -37,5 +39,10 @@ public class BaseTests {
 	@Bean
 	public TeamService teamService() {
 		return new TeamServiceImpl();
+	}
+	
+	@Bean
+	public SpeedwayService speedway() {
+		return new SpeedwaySerivceImpl();
 	}
 }
