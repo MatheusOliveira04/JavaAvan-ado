@@ -136,4 +136,21 @@ public class PilotServiceTest extends BaseTests {
 		var exception = assertThrows(ObjectNotFound.class, () -> service.delete(10));
 		assertEquals("piloto 10 não existe", exception.getMessage());
 	}
+	
+	@Test
+	@DisplayName("Teste buscar por nome")
+	@Sql({ "classpath:/resources/sqls/pilot.sql" })
+	void findByNameContaining() {
+		List<Pilot> list = service.findByNameContainingIgnoreCaseOrderById("pil");
+		assertEquals(2, list.size());
+		assertEquals("Piloto 1", list.get(0).getName());
+	}
+	
+	@Test
+	@DisplayName("Teste buscar por nome não encontrado")
+	void findByNameNonExist() {
+		var exception = assertThrows(ObjectNotFound.class, 
+				() -> service.findByNameContainingIgnoreCaseOrderById("xz"));
+		assertEquals("Nenhum piloto contém xz no nome", exception.getMessage());
+	}
 }

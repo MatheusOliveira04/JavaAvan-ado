@@ -56,4 +56,13 @@ public class PilotServiceImpl implements PilotService {
 		repository.delete(findById(id));
 
 	}
+
+	@Override
+	public List<Pilot> findByNameContainingIgnoreCaseOrderById(String name) {
+		List<Pilot> list = repository.findByNameContainingIgnoreCaseOrderById(name);
+		if(list.isEmpty()) {
+			throw new ObjectNotFound("Nenhum piloto contém %s no nome".formatted(name));
+		}
+		return list;
+	}
 }

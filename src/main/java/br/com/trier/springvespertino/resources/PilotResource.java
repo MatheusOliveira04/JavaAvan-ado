@@ -37,6 +37,11 @@ public class PilotResource {
 		return ResponseEntity.ok(service.findAll());
 	}
 	
+	@GetMapping("/name/{name}")
+	public ResponseEntity<List<Pilot>> findByNameContainingIgnoreCaseOrderById(@PathVariable String name){
+		return ResponseEntity.ok(service.findByNameContainingIgnoreCaseOrderById(name));
+	}
+	
 	@PostMapping
 	public ResponseEntity<Pilot> insert(@RequestBody Pilot pilot) {
 		countryService.findById(pilot.getCountry().getId());

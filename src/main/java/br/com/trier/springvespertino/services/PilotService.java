@@ -15,5 +15,6 @@ public interface PilotService {
 	Pilot update(Pilot pilot);
 
 	void delete(Integer id);
-
+	
+	List<Pilot> findByNameContainingIgnoreCaseOrderById(String name);
 }
