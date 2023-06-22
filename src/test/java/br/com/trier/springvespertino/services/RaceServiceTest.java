@@ -75,7 +75,7 @@ public class RaceServiceTest extends BaseTests{
 	@Sql({"classpath:/resources/sqls/speedway.sql"})
 	@Sql({"classpath:/resources/sqls/championship.sql"})
 	void insertTest() {
-		Race race = new Race(null, ZonedDateTime.of(LocalDateTime.of(1990, 1, 1, 0, 0, 0), 
+		Race race = new Race(null, ZonedDateTime.of(LocalDateTime.of(2024, 1, 1, 0, 0, 0), 
 				ZoneId.of("America/Sao_Paulo")), speedwayService.findById(1), championshipService.findById(1));
 		race = service.insert(race);
 		assertNotNull(race);
@@ -84,38 +84,63 @@ public class RaceServiceTest extends BaseTests{
 		assertEquals(1, race.getChampionship().getId());
 	}
 	@Test
-	@DisplayName("Teste inserir com date inválido")
+	@DisplayName("Teste inserir com diferente de championship year")
 	void insertCountryNullTest() {
 		Speedway speed = new Speedway(1, "insert", 100, new Country(1, "insert"));
 		Championship champ = new Championship(1, "insert", 2000);
-		var exception = assertThrows(IntegrityViolation.class,() -> service.insert(new Race(1, ZonedDateTime.of(LocalDateTime.of(1900, 1, 1, 0, 0, 0), 
-				ZoneId.of("America/Sao_Paulo")), speed, champ)));
-		assertEquals("Date 01/01/1900 00:00:00 BRT inválido", exception.getMessage());
+		Race race = new Race(1, ZonedDateTime.of(LocalDateTime.of(1900, 1, 1, 0, 0, 0), 
+				ZoneId.of("America/Sao_Paulo")), speed, champ);
+		var exception = assertThrows(IntegrityViolation.class,() -> service.insert(race));
+		assertEquals("Ano data de corrida é diferente de ano do campeonato", exception.getMessage());
+	}
+	
+	@Test
+	@DisplayName("Teste inserir com date null")
+	@Sql({"classpath:/resources/sqls/country.sql"})
+	@Sql({"classpath:/resources/sqls/speedway.sql"})
+	@Sql({"classpath:/resources/sqls/championship.sql"})
+	void insertDateNullTest() {
+		Speedway speedway = speedwayService.findById(1);
+		Championship championship = championshipService.findById(1);
+		Race race = new Race(1, null, speedway, championship);
+		var exception = assertThrows(IntegrityViolation.class, () -> service.insert(race));
+		assertEquals("Data está vazia", exception.getMessage());
 	}
 	
 	@Test
 	@DisplayName("Teste update")
 	@Sql({"classpath:/resources/sqls/race.sql"})
 	void updateTest() {
-		Race race = new Race(1, ZonedDateTime.of(LocalDateTime.of(1995, 1, 1, 0, 0, 0), 
+		Race race = new Race(1, ZonedDateTime.of(LocalDateTime.of(2023, 1, 1, 0, 0, 0), 
 				ZoneId.of("America/Sao_Paulo")), speedwayService.findById(2), championshipService.findById(2));
 		race = service.insert(race);
 		assertNotNull(race);
 		assertEquals(1, race.getId());
-		assertEquals(1995, race.getDate().getYear());
+		assertEquals(2023, race.getDate().getYear());
 		assertEquals(2, race.getSpeedway().getId());
 		assertEquals(2, race.getChampionship().getId());
 	}
 	
 	@Test
-	@DisplayName("Teste update com date inválido")
+	@DisplayName("Teste update com date diferente de championship year")
 	@Sql({"classpath:/resources/sqls/race.sql"})
 	void updateDateInvalid(){
 		Speedway speed = new Speedway(1, "update", 100, new Country(1, "update"));
 		Championship champ = new Championship(1, "update", 2000);
 		var exception = assertThrows(IntegrityViolation.class,() -> service.insert(new Race(1, ZonedDateTime.of(LocalDateTime.of(1900, 1, 1, 0, 0, 0), 
 				ZoneId.of("America/Sao_Paulo")), speed, champ)));
-		assertEquals("Date 01/01/1900 00:00:00 BRT inválido", exception.getMessage());
+		assertEquals("Ano data de corrida é diferente de ano do campeonato", exception.getMessage());
+	}
+	
+	@Test
+	@DisplayName("Teste update com date null")
+	@Sql({"classpath:/resources/sqls/race.sql"})
+	void updateDateNullTest() {
+		Speedway speedway = speedwayService.findById(1);
+		Championship championship = championshipService.findById(1);
+		Race race = new Race(1, null, speedway, championship);
+		var exception = assertThrows(IntegrityViolation.class, () -> service.update(race));
+		assertEquals("Data está vazia", exception.getMessage());
 	}
 	
 	@Test

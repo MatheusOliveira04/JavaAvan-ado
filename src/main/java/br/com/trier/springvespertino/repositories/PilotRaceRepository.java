@@ -1,17 +1,17 @@
 package br.com.trier.springvespertino.repositories;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import br.com.trier.springvespertino.models.Pilot;
+import br.com.trier.springvespertino.models.PilotRace;
 import br.com.trier.springvespertino.models.Race;
 
 @Repository
-public interface RaceRespository extends JpaRepository<Race, Integer>{
+public interface PilotRaceRepository extends JpaRepository<PilotRace, Integer>{
 
-
-	List<Race> findByDateAfter(ZonedDateTime date);
+	List<PilotRace> findByPilotIgnoreCase(Pilot pilot);
+	List<PilotRace> findByRaceIgnoreCase(Race race);
 }

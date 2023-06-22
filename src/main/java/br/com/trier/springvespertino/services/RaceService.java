@@ -1,5 +1,6 @@
 package br.com.trier.springvespertino.services;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import br.com.trier.springvespertino.models.Race;
@@ -16,4 +17,5 @@ public interface RaceService {
 	
 	void delete(Integer id);
 	
+	List<Race> findByDateAfter(ZonedDateTime date);
 }

@@ -34,7 +34,6 @@ public class SpeedwayResource {
 
 	@PostMapping
 	public ResponseEntity<Speedway> insert(@RequestBody Speedway speedway) {
-		countryService.findById(speedway.getCountry().getId());
 		return ResponseEntity.ok(service.insert(speedway));
 	}
 
