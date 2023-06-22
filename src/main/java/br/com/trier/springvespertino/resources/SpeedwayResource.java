@@ -19,7 +19,7 @@ import br.com.trier.springvespertino.services.SpeedwayService;
 
 @RestController
 @RequestMapping("/speedway")
-public class SpeedwayResources {
+public class SpeedwayResource {
 
 	@Autowired
 	private SpeedwayService service;
