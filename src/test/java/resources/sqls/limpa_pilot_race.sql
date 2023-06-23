@@ -1,0 +1,1 @@
+delete from pilot_race where id_pilot_race > 0;

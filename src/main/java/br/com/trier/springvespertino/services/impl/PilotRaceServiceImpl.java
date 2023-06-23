@@ -35,7 +35,7 @@ public class PilotRaceServiceImpl implements PilotRaceService{
 	public List<PilotRace> findAll() {
 		List<PilotRace> list = repository.findAll();
 		if(list.isEmpty()) {
-			throw new IntegrityViolation("Nenhum cadastro");
+			throw new ObjectNotFound("Nenhum cadastro");
 		}
 		return list;
 	}
