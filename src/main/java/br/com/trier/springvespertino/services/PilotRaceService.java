@@ -18,7 +18,7 @@ public interface PilotRaceService {
 	
 	void delete(Integer id);
 	
-	List<PilotRace> findByPilotIgnoreCase(Pilot pilot);
+	List<PilotRace> findByPilot(Pilot pilot);
 	
-	List<PilotRace> findByRaceIgnoreCase(Race race);
+	List<PilotRace> findByRace(Race race);
 }

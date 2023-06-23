@@ -68,8 +68,8 @@ public class PilotRaceServiceImpl implements PilotRaceService{
 	}
 
 	@Override
-	public List<PilotRace> findByPilotIgnoreCase(Pilot pilot) {
-		List<PilotRace> list = repository.findByPilotIgnoreCase(pilot);
+	public List<PilotRace> findByPilot(Pilot pilot) {
+		List<PilotRace> list = repository.findByPilot(pilot);
 		if(list.isEmpty()) {
 			throw new IntegrityViolation("Nenhum piloto encontrado no pista_corrida");
 		}
@@ -77,8 +77,8 @@ public class PilotRaceServiceImpl implements PilotRaceService{
 	}
 
 	@Override
-	public List<PilotRace> findByRaceIgnoreCase(Race race) {
-		List<PilotRace> list = repository.findByRaceIgnoreCase(race);
+	public List<PilotRace> findByRace(Race race) {
+		List<PilotRace> list = repository.findByRace(race);
 		if(list.isEmpty()) {
 			throw new IntegrityViolation("Nenhuma corrida encontrada no piloto_corrida");
 		}

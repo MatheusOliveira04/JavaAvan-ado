@@ -12,6 +12,6 @@ import br.com.trier.springvespertino.models.Race;
 @Repository
 public interface PilotRaceRepository extends JpaRepository<PilotRace, Integer>{
 
-	List<PilotRace> findByPilotIgnoreCase(Pilot pilot);
-	List<PilotRace> findByRaceIgnoreCase(Race race);
+	List<PilotRace> findByPilot(Pilot pilot);
+	List<PilotRace> findByRace(Race race);
 }
