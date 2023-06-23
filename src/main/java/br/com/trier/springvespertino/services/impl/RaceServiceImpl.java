@@ -9,7 +9,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.trier.springvespertino.models.Championship;
 import br.com.trier.springvespertino.models.Race;
+import br.com.trier.springvespertino.models.Speedway;
 import br.com.trier.springvespertino.repositories.RaceRespository;
 import br.com.trier.springvespertino.services.RaceService;
 import br.com.trier.springvespertino.services.exceptions.IntegrityViolation;
@@ -72,4 +74,25 @@ public class RaceServiceImpl implements RaceService {
 		}
 		return list;
 	}
+
+	@Override
+	public List<Race> findBySpeedwayOrderById(Speedway speedway) {
+		List<Race> list = repository.findBySpeedwayOrderById(speedway);
+		if(list.isEmpty()) {
+			throw new ObjectNotFound("pista %s não encontrado na corrida".formatted(speedway.getId()));
+		}
+		return list;
+	}
+
+	@Override
+	public List<Race> findByChampionshipOrderById(Championship championship) {
+		List<Race> list = repository.findByChampionshipOrderById(championship);
+		if(list.isEmpty()) {
+			throw new ObjectNotFound("campeonato %s não encontrado na corrida".formatted(championship.getId()));
+		}
+		return list;
+	}
+
+	
+	
 }

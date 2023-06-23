@@ -55,6 +55,23 @@ public class RaceResource {
 				.toList());
 	}
 	
+	@GetMapping("/speedway/{idSpeedway}")
+	public ResponseEntity<List<RaceDTO>> findByRaceOrderById(@PathVariable Integer idSpeedway){
+		return ResponseEntity.ok(service.findBySpeedwayOrderById(speedwayService.findById(idSpeedway))
+				.stream()
+				.map(race -> race.toDTO())
+				.toList());
+	}
+	
+	@GetMapping("/championship/{idChampionship}")
+	public ResponseEntity<List<RaceDTO>> findByChampionshipOrderById(@PathVariable Integer idChampionship){
+		return ResponseEntity.ok(service.findByChampionshipOrderById(
+				championshipService.findById(idChampionship))
+				.stream()
+				.map(race -> race.toDTO())
+				.toList());
+	}
+	
 	@PostMapping
 	public ResponseEntity<RaceDTO> insert(@RequestBody RaceDTO raceDTO) {
 		Race race = new Race(raceDTO, 

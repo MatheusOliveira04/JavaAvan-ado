@@ -33,6 +33,8 @@ public class PilotServiceTest extends BaseTests {
 
 	@Test
 	@DisplayName("Teste buscar por id")
+	@Sql({ "classpath:/resources/sqls/country.sql" })
+	@Sql({ "classpath:/resources/sqls/team.sql" })
 	@Sql({ "classpath:/resources/sqls/pilot.sql" })
 	void findByIdTest() {
 		Pilot pilot = service.findById(1);
@@ -45,6 +47,8 @@ public class PilotServiceTest extends BaseTests {
 
 	@Test
 	@DisplayName("Teste buscar por id inexistente")
+	@Sql({ "classpath:/resources/sqls/country.sql" })
+	@Sql({ "classpath:/resources/sqls/team.sql" })
 	@Sql({ "classpath:/resources/sqls/pilot.sql" })
 	void findByIdNonExist() {
 		var exception = assertThrows(ObjectNotFound.class, () -> service.findById(10));
@@ -53,6 +57,8 @@ public class PilotServiceTest extends BaseTests {
 
 	@Test
 	@DisplayName("Teste buscar todos")
+	@Sql({ "classpath:/resources/sqls/country.sql" })
+	@Sql({ "classpath:/resources/sqls/team.sql" })
 	@Sql({ "classpath:/resources/sqls/pilot.sql" })
 	void listAllTest() {
 		List<Pilot> list = service.findAll();
@@ -95,6 +101,8 @@ public class PilotServiceTest extends BaseTests {
 
 	@Test
 	@DisplayName("Teste atualizar")
+	@Sql({ "classpath:/resources/sqls/country.sql" })
+	@Sql({ "classpath:/resources/sqls/team.sql" })
 	@Sql({ "classpath:/resources/sqls/pilot.sql" })
 	void update() {
 		Pilot pilot = new Pilot(1, "update", new Country(1, null), new Team(1, null));
@@ -111,6 +119,8 @@ public class PilotServiceTest extends BaseTests {
 
 	@Test
 	@DisplayName("Teste atualizar com country null")
+	@Sql({ "classpath:/resources/sqls/country.sql" })
+	@Sql({ "classpath:/resources/sqls/team.sql" })
 	@Sql({ "classpath:/resources/sqls/pilot.sql" })
 	void updateInvalidCountry() {
 		Pilot pilot = new Pilot(1, "update", null, new Team(1, "update"));
@@ -120,6 +130,8 @@ public class PilotServiceTest extends BaseTests {
 
 	@Test
 	@DisplayName("Teste deletar")
+	@Sql({ "classpath:/resources/sqls/country.sql" })
+	@Sql({ "classpath:/resources/sqls/team.sql" })
 	@Sql({ "classpath:/resources/sqls/pilot.sql" })
 	void deleteTest() {
 		List<Pilot> list = service.findAll();
@@ -131,6 +143,8 @@ public class PilotServiceTest extends BaseTests {
 
 	@Test
 	@DisplayName("Teste delete id não encotrado")
+	@Sql({ "classpath:/resources/sqls/country.sql" })
+	@Sql({ "classpath:/resources/sqls/team.sql" })
 	@Sql({ "classpath:/resources/sqls/pilot.sql" })
 	void deleteNotFoundId() {
 		var exception = assertThrows(ObjectNotFound.class, () -> service.delete(10));
@@ -139,6 +153,8 @@ public class PilotServiceTest extends BaseTests {
 	
 	@Test
 	@DisplayName("Teste buscar por nome")
+	@Sql({ "classpath:/resources/sqls/country.sql" })
+	@Sql({ "classpath:/resources/sqls/team.sql" })
 	@Sql({ "classpath:/resources/sqls/pilot.sql" })
 	void findByNameContaining() {
 		List<Pilot> list = service.findByNameContainingIgnoreCaseOrderById("pil");

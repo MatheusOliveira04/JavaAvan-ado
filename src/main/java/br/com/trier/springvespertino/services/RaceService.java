@@ -3,7 +3,9 @@ package br.com.trier.springvespertino.services;
 import java.time.ZonedDateTime;
 import java.util.List;
 
+import br.com.trier.springvespertino.models.Championship;
 import br.com.trier.springvespertino.models.Race;
+import br.com.trier.springvespertino.models.Speedway;
 
 public interface RaceService {
 
@@ -18,4 +20,8 @@ public interface RaceService {
 	void delete(Integer id);
 	
 	List<Race> findByDateAfter(ZonedDateTime date);
+	
+	List<Race> findBySpeedwayOrderById(Speedway speedway);
+	
+	List<Race> findByChampionshipOrderById(Championship championship);
 }

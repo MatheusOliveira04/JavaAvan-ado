@@ -62,7 +62,6 @@ public class PilotRaceServiceTest extends BaseTests{
 	@Test
 	@DisplayName("Teste inserir")
 	@Sql({"classpath:/resources/sqls/pilot_race.sql"})
-	@Sql({"classpath:/resources/sqls/pilot_race.sql"})
 	void insert() {
 		PilotRace pilotRace = new PilotRace(1, 1, pilotService.findById(1), raceService.findById(1));
 		pilotRace = service.insert(pilotRace);
@@ -76,7 +75,10 @@ public class PilotRaceServiceTest extends BaseTests{
 	
 	@Test
 	@DisplayName("Teste inserir com piloto nulo")
-	@Sql({"classpath:/resources/sqls/pilot_race.sql"})
+	@Sql({"classpath:/resources/sqls/country.sql"})
+	@Sql({"classpath:/resources/sqls/speedway.sql"})
+	@Sql({"classpath:/resources/sqls/championship.sql"})
+	@Sql({"classpath:/resources/sqls/race.sql"})
 	void insertPilotNull() {
 		PilotRace pilotRace = new PilotRace(null, 1, null, raceService.findById(1));
 		var exception = assertThrows(IntegrityViolation.class, () -> service.insert(pilotRace));
@@ -85,8 +87,9 @@ public class PilotRaceServiceTest extends BaseTests{
 	
 	@Test
 	@DisplayName("Teste inserir com corrida nulo")
-	@Sql({"classpath:/resources/sqls/pilot_race.sql"})
-	@Sql({"classpath:/resources/sqls/limpa_pilot_race.sql"})
+	@Sql({ "classpath:/resources/sqls/country.sql" })
+	@Sql({ "classpath:/resources/sqls/team.sql" })
+	@Sql({ "classpath:/resources/sqls/pilot.sql" })
 	void insertRaceNull() {
 		PilotRace pilotRace = new PilotRace(1, 1, pilotService.findById(1), null);
 		var exception = assertThrows(IntegrityViolation.class, () -> service.insert(pilotRace));
@@ -111,7 +114,7 @@ public class PilotRaceServiceTest extends BaseTests{
 	@DisplayName("Teste atualizar com piloto nulo")
 	@Sql({"classpath:/resources/sqls/pilot_race.sql"})
 	void updatePilotNull() {
-		PilotRace pilotRace = new PilotRace(1, 10, null, raceService.findById(2));
+		PilotRace pilotRace = new PilotRace(1, 10, null, raceService.findById(1));
 		var exception = assertThrows(IntegrityViolation.class, () -> service.update(pilotRace));
 		assertEquals("Piloto está nulo", exception.getMessage());
 	}

@@ -37,6 +37,9 @@ public class RaceServiceTest extends BaseTests{
 	
 	@Test
 	@DisplayName("Teste buscar por id")
+	@Sql({"classpath:/resources/sqls/country.sql"})
+	@Sql({"classpath:/resources/sqls/speedway.sql"})
+	@Sql({"classpath:/resources/sqls/championship.sql"})
 	@Sql({"classpath:/resources/sqls/race.sql"})
 	void findByIdTest() {
 		Race race = service.findById(1);
@@ -54,6 +57,9 @@ public class RaceServiceTest extends BaseTests{
 
 	@Test
 	@DisplayName("Teste listar todos")
+	@Sql({"classpath:/resources/sqls/country.sql"})
+	@Sql({"classpath:/resources/sqls/speedway.sql"})
+	@Sql({"classpath:/resources/sqls/championship.sql"})
 	@Sql({"classpath:/resources/sqls/race.sql"})
 	void ListAllTest() {
 		List<Race> list = service.findAll();
@@ -109,6 +115,9 @@ public class RaceServiceTest extends BaseTests{
 	
 	@Test
 	@DisplayName("Teste update")
+	@Sql({"classpath:/resources/sqls/country.sql"})
+	@Sql({"classpath:/resources/sqls/speedway.sql"})
+	@Sql({"classpath:/resources/sqls/championship.sql"})
 	@Sql({"classpath:/resources/sqls/race.sql"})
 	void updateTest() {
 		Race race = new Race(1, ZonedDateTime.of(LocalDateTime.of(2023, 1, 1, 0, 0, 0), 
@@ -123,6 +132,9 @@ public class RaceServiceTest extends BaseTests{
 	
 	@Test
 	@DisplayName("Teste update com date diferente de championship year")
+	@Sql({"classpath:/resources/sqls/country.sql"})
+	@Sql({"classpath:/resources/sqls/speedway.sql"})
+	@Sql({"classpath:/resources/sqls/championship.sql"})
 	@Sql({"classpath:/resources/sqls/race.sql"})
 	void updateDateInvalid(){
 		Speedway speed = new Speedway(1, "update", 100, new Country(1, "update"));
@@ -134,6 +146,9 @@ public class RaceServiceTest extends BaseTests{
 	
 	@Test
 	@DisplayName("Teste update com date null")
+	@Sql({"classpath:/resources/sqls/country.sql"})
+	@Sql({"classpath:/resources/sqls/speedway.sql"})
+	@Sql({"classpath:/resources/sqls/championship.sql"})
 	@Sql({"classpath:/resources/sqls/race.sql"})
 	void updateDateNullTest() {
 		Speedway speedway = speedwayService.findById(1);
@@ -145,6 +160,9 @@ public class RaceServiceTest extends BaseTests{
 	
 	@Test
 	@DisplayName("Teste deletar")
+	@Sql({"classpath:/resources/sqls/country.sql"})
+	@Sql({"classpath:/resources/sqls/speedway.sql"})
+	@Sql({"classpath:/resources/sqls/championship.sql"})
 	@Sql({"classpath:/resources/sqls/race.sql"})
 	void deleteTest() {
 		List<Race> list = service.findAll();
@@ -159,6 +177,52 @@ public class RaceServiceTest extends BaseTests{
 	void deleteNotFoundId(){
 		var exception = assertThrows(ObjectNotFound.class, () -> service.delete(10));
 		assertEquals("Race 10 não encontrado", exception.getMessage());
+	}
+	
+	@Test
+	@DisplayName("Teste buscar por id pista")
+	@Sql({"classpath:/resources/sqls/country.sql"})
+	@Sql({"classpath:/resources/sqls/speedway.sql"})
+	@Sql({"classpath:/resources/sqls/championship.sql"})
+	@Sql({"classpath:/resources/sqls/race.sql"})
+	void findBySpeedwayTest() {
+		List<Race> list = service.findBySpeedwayOrderById(speedwayService.findById(1));
+		assertEquals(2, list.size());
+	}
+	
+	@Test
+	@DisplayName("Teste buscar por id pista, nenhum encontrado")
+	@Sql({"classpath:/resources/sqls/country.sql"})
+	@Sql({"classpath:/resources/sqls/speedway.sql"})
+	@Sql({"classpath:/resources/sqls/championship.sql"})
+	@Sql({"classpath:/resources/sqls/race.sql"})
+	void findBySpeedwayNotFound() {
+		var exception = assertThrows(ObjectNotFound.class, 
+				() -> service.findBySpeedwayOrderById(speedwayService.findById(2)));
+		assertEquals("pista 2 não encontrado na corrida", exception.getMessage());
+	}
+	
+	@Test
+	@DisplayName("Teste buscar por id campeonato")
+	@Sql({"classpath:/resources/sqls/country.sql"})
+	@Sql({"classpath:/resources/sqls/speedway.sql"})
+	@Sql({"classpath:/resources/sqls/championship.sql"})
+	@Sql({"classpath:/resources/sqls/race.sql"})
+	void findByChampionshipTest() {
+		List<Race> list = service.findByChampionshipOrderById(championshipService.findById(1));
+		assertEquals(2, list.size());
+	}
+	
+	@Test
+	@DisplayName("Teste buscar por id campeonato nenhum encontrado")
+	@Sql({"classpath:/resources/sqls/country.sql"})
+	@Sql({"classpath:/resources/sqls/speedway.sql"})
+	@Sql({"classpath:/resources/sqls/championship.sql"})
+	@Sql({"classpath:/resources/sqls/race.sql"})
+	void findByChampionshipNotFound() {
+		var exception = assertThrows(ObjectNotFound.class, 
+				() -> service.findByChampionshipOrderById(championshipService.findById(2)));
+		assertEquals("campeonato 2 não encontrado na corrida", exception.getMessage());
 	}
 	
 }
