@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.trier.springvespertino.models.Pilot;
+import br.com.trier.springvespertino.models.PilotRace;
+import br.com.trier.springvespertino.models.Team;
 import br.com.trier.springvespertino.repositories.PilotRepository;
 import br.com.trier.springvespertino.services.PilotService;
 import br.com.trier.springvespertino.services.exceptions.IntegrityViolation;
@@ -65,4 +67,15 @@ public class PilotServiceImpl implements PilotService {
 		}
 		return list;
 	}
+
+	@Override
+	public List<Pilot> findByTeam(Team team) {
+		List<Pilot> list = repository.findByTeam(team);
+		if(list.isEmpty()) {
+			throw new IntegrityViolation("Nenhuma equipe encontrada no piloto");
+		}
+		return list;
+	}
+
+
 }

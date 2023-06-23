@@ -6,9 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import br.com.trier.springvespertino.models.Pilot;
+import br.com.trier.springvespertino.models.Team;
 
 @Repository
 public interface PilotRepository extends JpaRepository<Pilot, Integer>{
 	
 	List<Pilot> findByNameContainingIgnoreCaseOrderById(String name);
+	List<Pilot> findByTeam(Team team);
 }

@@ -44,6 +44,14 @@ public class PilotResource {
 				.map(pilot -> pilot.toDTO())
 				.toList());
 	}
+
+	@GetMapping("team/{id}")
+	public ResponseEntity<List<PilotDTO>> findByTeam(@PathVariable Integer id) {
+		return ResponseEntity.ok(service.findByTeam(teamService.findById(id))
+				.stream()
+				.map(pilot -> pilot.toDTO())
+				.toList());
+	}
 	
 	@GetMapping("/name/{name}")
 	public ResponseEntity<List<PilotDTO>> findByNameContainingIgnoreCaseOrderById(@PathVariable String name){
