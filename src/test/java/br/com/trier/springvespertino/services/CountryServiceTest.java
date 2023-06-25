@@ -40,7 +40,7 @@ public class CountryServiceTest extends BaseTests{
 	@Sql({"classpath:/resources/sqls/country.sql"})
 	void findByIdNonExist() {
 		var exception = assertThrows(ObjectNotFound.class,() -> service.findById(10));
-		assertEquals("id: 10 não encontrado", exception.getMessage());
+		assertEquals("id: 10 do país não encontrado", exception.getMessage());
 	}
 	
 	@Test
@@ -55,7 +55,7 @@ public class CountryServiceTest extends BaseTests{
 	@DisplayName("Teste buscar todos Country sem cadastro")
 	void listAllEmptyTest() {
 		var exception = assertThrows(ObjectNotFound.class, () -> service.findAll());
-			assertEquals("Nenhum Country encontrado", exception.getMessage());
+			assertEquals("Nenhum país encontrado", exception.getMessage());
 	}
 	
 	@Test
@@ -78,7 +78,7 @@ public class CountryServiceTest extends BaseTests{
 	void insertNameAlreadyExistTest() {
 		Country c = new Country(3,"Brazil");
 		var exception = assertThrows(IntegrityViolation.class, () -> service.insert(c));
-		assertEquals("Nome Brazil já existe", exception.getMessage());
+		assertEquals("Nome Brazil já existe no país", exception.getMessage());
 	}
 	
 	@Test
@@ -103,7 +103,7 @@ public class CountryServiceTest extends BaseTests{
 	void updateDoubleNameTest() {
 		Country c = new Country(2, "Brazil");
 		var exception = assertThrows(IntegrityViolation.class, () -> service.update(c));
-		assertEquals("Nome Brazil já existe", exception.getMessage());
+		assertEquals("Nome Brazil já existe no país", exception.getMessage());
 	}
 	
 	@Test
@@ -112,7 +112,7 @@ public class CountryServiceTest extends BaseTests{
 	void updateIdNonExist() {
 		Country c = new Country(10, "Update");
 		var exception = assertThrows(ObjectNotFound.class,() -> service.update(c));
-		assertEquals("id: 10 não encontrado", exception.getMessage());
+		assertEquals("id: 10 do país não encontrado", exception.getMessage());
 	}
 	
 	@Test
@@ -132,7 +132,7 @@ public class CountryServiceTest extends BaseTests{
 	@Sql({"classpath:/resources/sqls/country.sql"})
 	void deleteNonExistTest() {
 		var exception = assertThrows(ObjectNotFound.class, () -> service.delete(10));
-		assertEquals("id: 10 não encontrado", exception.getMessage());
+		assertEquals("id: 10 do país não encontrado", exception.getMessage());
 	}
 	
 	@Test
@@ -150,6 +150,6 @@ public class CountryServiceTest extends BaseTests{
 	@Sql({"classpath:/resources/sqls/country.sql"})
 	void findByNameNonContainsTest() {
 	 var exception = assertThrows(ObjectNotFound.class,() -> service.findByNameContainingIgnoreCase("G"));
-	 assertEquals("Nenhum Country encontrado", exception.getMessage());
+	 assertEquals("Nenhum país encontrado que contém G", exception.getMessage());
 	}
 }

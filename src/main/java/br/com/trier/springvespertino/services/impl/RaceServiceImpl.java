@@ -1,9 +1,6 @@
 package br.com.trier.springvespertino.services.impl;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,14 +33,15 @@ public class RaceServiceImpl implements RaceService {
 	public List<Race> findAll() {
 		List<Race> list = repository.findAll();
 		if (list.isEmpty()) {
-			throw new ObjectNotFound("Nenhum race encontrado");
+			throw new ObjectNotFound("Nenhum corrida encontrado");
 		}
 		return list;
 	}
 
 	@Override
 	public Race findById(Integer id) {
-		return repository.findById(id).orElseThrow(() -> new ObjectNotFound("Race %s não encontrado".formatted(id)));
+		return repository.findById(id).orElseThrow(
+				() -> new ObjectNotFound("Id: %s da corrida não encontrado".formatted(id)));
 	}
 
 	@Override
@@ -70,7 +68,7 @@ public class RaceServiceImpl implements RaceService {
 	public List<Race> findByDateAfter(ZonedDateTime date) {
 		List<Race> list = repository.findByDateAfter(date);
 		if (list.isEmpty()) {
-			throw new ObjectNotFound("Nenhum race encontrado com esta data: %s".formatted(date));
+			throw new ObjectNotFound("Nenhuma corrida encontrada com esta data: %s".formatted(date));
 		}
 		return list;
 	}

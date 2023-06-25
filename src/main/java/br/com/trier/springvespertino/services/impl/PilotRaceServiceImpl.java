@@ -43,7 +43,7 @@ public class PilotRaceServiceImpl implements PilotRaceService{
 	@Override
 	public PilotRace findById(Integer id) {
 		return repository.findById(id).orElseThrow(
-				() -> new ObjectNotFound("id: %s não encontrado".formatted(id)));
+				() -> new ObjectNotFound("id: %s do piloto_corrida não encontrado".formatted(id)));
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class PilotRaceServiceImpl implements PilotRaceService{
 	public List<PilotRace> findByPilot(Pilot pilot) {
 		List<PilotRace> list = repository.findByPilot(pilot);
 		if(list.isEmpty()) {
-			throw new IntegrityViolation("Nenhum piloto encontrado no pista_corrida");
+			throw new ObjectNotFound("Nenhum piloto encontrado no piloto_corrida");
 		}
 		return list;
 	}
@@ -80,7 +80,7 @@ public class PilotRaceServiceImpl implements PilotRaceService{
 	public List<PilotRace> findByRace(Race race) {
 		List<PilotRace> list = repository.findByRace(race);
 		if(list.isEmpty()) {
-			throw new IntegrityViolation("Nenhuma corrida encontrada no piloto_corrida");
+			throw new ObjectNotFound("Nenhuma corrida encontrada no piloto_corrida");
 		}
 		return list;
 	}

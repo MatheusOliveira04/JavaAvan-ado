@@ -26,7 +26,7 @@ public class SpeedwaySerivceImpl implements SpeedwayService{
 	
 	private void validateCountryIsNull(Speedway speedway) {
 		if(speedway.getCountry() == null) {
-			throw new IntegrityViolation("Country está null");
+			throw new IntegrityViolation("País da pista está nulo");
 		}
 	}
 	

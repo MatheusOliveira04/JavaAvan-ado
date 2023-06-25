@@ -27,6 +27,6 @@ public class Championship {
 	@Column(name = "description_championship")
 	private String description;
 	
-	@Column(name = "year_description")
+	@Column(name = "year_championship")
 	private Integer year;
 }

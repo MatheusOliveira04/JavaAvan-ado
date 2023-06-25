@@ -27,8 +27,8 @@ public class PilotRace {
 	@Column(name = "id_pilot_race")
 	private Integer id;
 	
-	@Column(name = "colocacao_pilot_race")
-	private Integer colocacao;
+	@Column(name = "position_pilot_race")
+	private Integer position;
 	
 	@ManyToOne
 	private Pilot pilot;
@@ -37,11 +37,11 @@ public class PilotRace {
 	private Race race;
 	
 	public PilotRace(PilotRaceDTO dto, Pilot pilot, Race race) {
-		this(dto.getId(), dto.getColocacao(), pilot, race);
+		this(dto.getId(), dto.getPosition(), pilot, race);
 	}
 	
 	public PilotRaceDTO toDTO() {
-		return new PilotRaceDTO(getId(), getColocacao(), 
+		return new PilotRaceDTO(getId(), getPosition(), 
 				getPilot().getId(), getPilot().getName(),
 				getRace().getId(), DateUtil.convertZDTToString(getRace().getDate()));
 	}

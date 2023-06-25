@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.trier.springvespertino.models.Country;
 import br.com.trier.springvespertino.models.Pilot;
-import br.com.trier.springvespertino.models.PilotRace;
 import br.com.trier.springvespertino.models.Team;
 import br.com.trier.springvespertino.repositories.PilotRepository;
 import br.com.trier.springvespertino.services.PilotService;
@@ -21,13 +21,14 @@ public class PilotServiceImpl implements PilotService {
 
 	private void validateCountryIsNull(Pilot pilot) {
 		if (pilot.getCountry() == null) {
-			throw new IntegrityViolation("Country está null");
+			throw new IntegrityViolation("País está null");
 		}
 	}
 
 	@Override
 	public Pilot findById(Integer id) {
-		return repository.findById(id).orElseThrow(() -> new ObjectNotFound("piloto %s não existe".formatted(id)));
+		return repository.findById(id).orElseThrow(
+				() -> new ObjectNotFound("Id: %s do piloto não encontrado".formatted(id)));
 
 	}
 
@@ -72,10 +73,21 @@ public class PilotServiceImpl implements PilotService {
 	public List<Pilot> findByTeam(Team team) {
 		List<Pilot> list = repository.findByTeam(team);
 		if(list.isEmpty()) {
-			throw new IntegrityViolation("Nenhuma equipe encontrada no piloto");
+			throw new ObjectNotFound("Nenhuma equipe encontrada no piloto");
 		}
 		return list;
 	}
+
+	@Override
+	public List<Pilot> findByCountry(Country country) {
+		List<Pilot> list = repository.findByCountry(country);
+		if(list.isEmpty()) {
+			throw new ObjectNotFound("Nenhum país encontrado no piloto");
+		}
+		return list;
+	}
+
+	
 
 
 }

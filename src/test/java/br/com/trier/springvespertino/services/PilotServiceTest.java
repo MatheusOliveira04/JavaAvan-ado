@@ -52,7 +52,7 @@ public class PilotServiceTest extends BaseTests {
 	@Sql({ "classpath:/resources/sqls/pilot.sql" })
 	void findByIdNonExist() {
 		var exception = assertThrows(ObjectNotFound.class, () -> service.findById(10));
-		assertEquals("piloto 10 não existe", exception.getMessage());
+		assertEquals("Id: 10 do piloto não encontrado", exception.getMessage());
 	}
 
 	@Test
@@ -92,11 +92,11 @@ public class PilotServiceTest extends BaseTests {
 	}
 
 	@Test
-	@DisplayName("Teste inserir pilot com country null")
+	@DisplayName("Teste inserir piloto com país null")
 	void insertWithCountryNull() {
 		Pilot pilot = new Pilot(1, "insert", null, new Team(1, "insert"));
 		var exception = assertThrows(IntegrityViolation.class, () -> service.insert(pilot));
-		assertEquals("Country está null", exception.getMessage());
+		assertEquals("País está null", exception.getMessage());
 	}
 
 	@Test
@@ -118,14 +118,14 @@ public class PilotServiceTest extends BaseTests {
 	}
 
 	@Test
-	@DisplayName("Teste atualizar com country null")
+	@DisplayName("Teste atualizar com país null")
 	@Sql({ "classpath:/resources/sqls/country.sql" })
 	@Sql({ "classpath:/resources/sqls/team.sql" })
 	@Sql({ "classpath:/resources/sqls/pilot.sql" })
 	void updateInvalidCountry() {
 		Pilot pilot = new Pilot(1, "update", null, new Team(1, "update"));
 		var exception = assertThrows(IntegrityViolation.class, () -> service.update(pilot));
-		assertEquals("Country está null", exception.getMessage());
+		assertEquals("País está null", exception.getMessage());
 	}
 
 	@Test
@@ -148,7 +148,7 @@ public class PilotServiceTest extends BaseTests {
 	@Sql({ "classpath:/resources/sqls/pilot.sql" })
 	void deleteNotFoundId() {
 		var exception = assertThrows(ObjectNotFound.class, () -> service.delete(10));
-		assertEquals("piloto 10 não existe", exception.getMessage());
+		assertEquals("Id: 10 do piloto não encontrado", exception.getMessage());
 	}
 	
 	@Test
@@ -168,5 +168,51 @@ public class PilotServiceTest extends BaseTests {
 		var exception = assertThrows(ObjectNotFound.class, 
 				() -> service.findByNameContainingIgnoreCaseOrderById("xz"));
 		assertEquals("Nenhum piloto contém xz no nome", exception.getMessage());
+	}
+	
+	@Test
+	@DisplayName("Teste buscar por equipe")
+	@Sql({ "classpath:/resources/sqls/country.sql" })
+	@Sql({ "classpath:/resources/sqls/team.sql" })
+	@Sql({ "classpath:/resources/sqls/pilot.sql" })
+	void findByTeamTest() {
+		List<Pilot> list = service.findByTeam(teamService.findById(1));
+		assertEquals(2, list.size());
+		assertEquals(1, list.get(0).getId());
+		assertEquals(2, list.get(1).getId());
+	}
+	
+	@Test
+	@DisplayName("Teste buscar por equipe com nenhum piloto")
+	@Sql({ "classpath:/resources/sqls/country.sql" })
+	@Sql({ "classpath:/resources/sqls/team.sql" })
+	@Sql({ "classpath:/resources/sqls/pilot.sql" })
+	void findByTeamNotFoundTest() {
+		var exception = assertThrows(ObjectNotFound.class, 
+				() -> service.findByTeam(teamService.findById(2)));
+		assertEquals("Nenhuma equipe encontrada no piloto", exception.getMessage());
+	}
+	
+	@Test
+	@DisplayName("Teste buscar por país")
+	@Sql({ "classpath:/resources/sqls/country.sql" })
+	@Sql({ "classpath:/resources/sqls/team.sql" })
+	@Sql({ "classpath:/resources/sqls/pilot.sql" })
+	void findByCountryTest() {
+		List<Pilot> list = service.findByCountry(countryService.findById(1));
+		assertEquals(2, list.size());
+		assertEquals(1, list.get(0).getId());
+		assertEquals(2, list.get(1).getId());
+	}
+	
+	@Test
+	@DisplayName("Teste buscar por país com nenhum piloto")
+	@Sql({ "classpath:/resources/sqls/country.sql" })
+	@Sql({ "classpath:/resources/sqls/team.sql" })
+	@Sql({ "classpath:/resources/sqls/pilot.sql" })
+	void findByCountryNotFoundTest() {
+		var exception = assertThrows(ObjectNotFound.class, 
+				() -> service.findByCountry(countryService.findById(2)));
+		assertEquals("Nenhum país encontrado no piloto", exception.getMessage());
 	}
 }

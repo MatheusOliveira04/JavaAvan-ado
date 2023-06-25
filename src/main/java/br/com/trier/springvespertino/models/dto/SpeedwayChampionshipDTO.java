@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SpeedwayChampionshipDTO {
 
-	private String campeonato;
-	private Integer ano;
-	private List<RaceDTO> speedway;
+	private String championship;
+	private Integer size;
+	private List<Speedway> speedway;
 }

@@ -22,13 +22,13 @@ public class Speedway {
 	@Setter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_pista")
+	@Column(name = "id_speedway")
 	private Integer id;
 	
-	@Column(name = "nome_pista")
+	@Column(name = "name_speedway")
 	private String name;
 	
-	@Column(name = "tamanho_pista")
+	@Column(name = "size_speedway")
 	private Integer size;
 	
 	@ManyToOne

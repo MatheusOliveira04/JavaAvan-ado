@@ -21,6 +21,7 @@ import br.com.trier.springvespertino.models.Race;
 import br.com.trier.springvespertino.models.Speedway;
 import br.com.trier.springvespertino.services.exceptions.IntegrityViolation;
 import br.com.trier.springvespertino.services.exceptions.ObjectNotFound;
+import br.com.trier.springvespertino.utils.DateUtil;
 import jakarta.transaction.Transactional;
 
 @Transactional
@@ -52,7 +53,7 @@ public class RaceServiceTest extends BaseTests{
 	@DisplayName("Teste buscar por id sem cadastro")
 	void findByIdNotFoundTest() {
 		var exception = assertThrows(ObjectNotFound.class, () -> service.findById(10));
-		assertEquals("Race 10 não encontrado", exception.getMessage());
+		assertEquals("Id: 10 da corrida não encontrado", exception.getMessage());
 	}
 
 	@Test
@@ -72,7 +73,7 @@ public class RaceServiceTest extends BaseTests{
 	@DisplayName("Teste listar todos sem cadastro")
 	void ListAllEmptyTest() {
 		var exception = assertThrows(ObjectNotFound.class, () -> service.findAll());
-		assertEquals("Nenhum race encontrado", exception.getMessage());
+		assertEquals("Nenhum corrida encontrado", exception.getMessage());
 	}
 	
 	@Test
@@ -90,7 +91,7 @@ public class RaceServiceTest extends BaseTests{
 		assertEquals(1, race.getChampionship().getId());
 	}
 	@Test
-	@DisplayName("Teste inserir com diferente de championship year")
+	@DisplayName("Teste inserir com ano do campeonato diferente da data")
 	void insertCountryNullTest() {
 		Speedway speed = new Speedway(1, "insert", 100, new Country(1, "insert"));
 		Championship champ = new Championship(1, "insert", 2000);
@@ -101,7 +102,7 @@ public class RaceServiceTest extends BaseTests{
 	}
 	
 	@Test
-	@DisplayName("Teste inserir com date null")
+	@DisplayName("Teste inserir com data nulo")
 	@Sql({"classpath:/resources/sqls/country.sql"})
 	@Sql({"classpath:/resources/sqls/speedway.sql"})
 	@Sql({"classpath:/resources/sqls/championship.sql"})
@@ -114,15 +115,17 @@ public class RaceServiceTest extends BaseTests{
 	}
 	
 	@Test
-	@DisplayName("Teste update")
+	@DisplayName("Teste atualizar")
 	@Sql({"classpath:/resources/sqls/country.sql"})
 	@Sql({"classpath:/resources/sqls/speedway.sql"})
 	@Sql({"classpath:/resources/sqls/championship.sql"})
 	@Sql({"classpath:/resources/sqls/race.sql"})
 	void updateTest() {
 		Race race = new Race(1, ZonedDateTime.of(LocalDateTime.of(2023, 1, 1, 0, 0, 0), 
-				ZoneId.of("America/Sao_Paulo")), speedwayService.findById(2), championshipService.findById(2));
-		race = service.insert(race);
+				ZoneId.of("America/Sao_Paulo")), 
+				speedwayService.findById(2), 
+				championshipService.findById(2));
+		race = service.update(race);
 		assertNotNull(race);
 		assertEquals(1, race.getId());
 		assertEquals(2023, race.getDate().getYear());
@@ -131,7 +134,7 @@ public class RaceServiceTest extends BaseTests{
 	}
 	
 	@Test
-	@DisplayName("Teste update com date diferente de championship year")
+	@DisplayName("Teste atualizar com ano do campeonato diferente da data")
 	@Sql({"classpath:/resources/sqls/country.sql"})
 	@Sql({"classpath:/resources/sqls/speedway.sql"})
 	@Sql({"classpath:/resources/sqls/championship.sql"})
@@ -139,13 +142,13 @@ public class RaceServiceTest extends BaseTests{
 	void updateDateInvalid(){
 		Speedway speed = new Speedway(1, "update", 100, new Country(1, "update"));
 		Championship champ = new Championship(1, "update", 2000);
-		var exception = assertThrows(IntegrityViolation.class,() -> service.insert(new Race(1, ZonedDateTime.of(LocalDateTime.of(1900, 1, 1, 0, 0, 0), 
+		var exception = assertThrows(IntegrityViolation.class,() -> service.update(new Race(1, ZonedDateTime.of(LocalDateTime.of(1900, 1, 1, 0, 0, 0), 
 				ZoneId.of("America/Sao_Paulo")), speed, champ)));
 		assertEquals("Ano data de corrida é diferente de ano do campeonato", exception.getMessage());
 	}
 	
 	@Test
-	@DisplayName("Teste update com date null")
+	@DisplayName("Teste atualizar com data nulo")
 	@Sql({"classpath:/resources/sqls/country.sql"})
 	@Sql({"classpath:/resources/sqls/speedway.sql"})
 	@Sql({"classpath:/resources/sqls/championship.sql"})
@@ -156,6 +159,21 @@ public class RaceServiceTest extends BaseTests{
 		Race race = new Race(1, null, speedway, championship);
 		var exception = assertThrows(IntegrityViolation.class, () -> service.update(race));
 		assertEquals("Data está vazia", exception.getMessage());
+	}
+	
+	@Test
+	@DisplayName("Teste atualiza com id inexistente")
+	@Sql({"classpath:/resources/sqls/country.sql"})
+	@Sql({"classpath:/resources/sqls/speedway.sql"})
+	@Sql({"classpath:/resources/sqls/championship.sql"})
+	@Sql({"classpath:/resources/sqls/race.sql"})
+	void updateIdNotFoundTest() {
+		Race race = new Race(10, ZonedDateTime.of(LocalDateTime.of(2023, 1, 1, 0, 0, 0), 
+				ZoneId.of("America/Sao_Paulo")), 
+				speedwayService.findById(2), 
+				championshipService.findById(2));
+		var exception = assertThrows(ObjectNotFound.class, () -> service.update(race));
+		assertEquals("Id: 10 da corrida não encontrado", exception.getMessage());
 	}
 	
 	@Test
@@ -176,7 +194,7 @@ public class RaceServiceTest extends BaseTests{
 	@DisplayName("Teste delete id não encotrado")
 	void deleteNotFoundId(){
 		var exception = assertThrows(ObjectNotFound.class, () -> service.delete(10));
-		assertEquals("Race 10 não encontrado", exception.getMessage());
+		assertEquals("Id: 10 da corrida não encontrado", exception.getMessage());
 	}
 	
 	@Test
@@ -225,4 +243,28 @@ public class RaceServiceTest extends BaseTests{
 		assertEquals("campeonato 2 não encontrado na corrida", exception.getMessage());
 	}
 	
+	@Test
+	@DisplayName("Buscar todas corridas ocorridas depois da data")
+	@Sql({"classpath:/resources/sqls/country.sql"})
+	@Sql({"classpath:/resources/sqls/speedway.sql"})
+	@Sql({"classpath:/resources/sqls/championship.sql"})
+	@Sql({"classpath:/resources/sqls/race.sql"})
+	void findByDateAfterTest() {
+		List<Race> list = service.findByDateAfter(ZonedDateTime.of(
+				LocalDateTime.of(2000, 1, 1, 0, 0, 0), 
+				ZoneId.systemDefault()));
+		assertEquals(2, list.size());
+	}
+	
+	@Test
+	@DisplayName("Buscar todas corridas ocorridas depois da data com nenhuma corrida encontrada")
+	void findByDAteAfterNotFound() {
+		var exception = assertThrows(ObjectNotFound.class,
+				() -> service.findByDateAfter(ZonedDateTime.of(
+				LocalDateTime.of(2000, 1, 1, 0, 0, 0), 
+				ZoneId.systemDefault())));
+		assertEquals(
+				"Nenhuma corrida encontrada com esta data: 2000-01-01T00:00-02:00[America/Sao_Paulo]",
+				exception.getMessage());
+	}
 }

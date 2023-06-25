@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.trier.springvespertino.models.Championship;
 import br.com.trier.springvespertino.models.Country;
 import br.com.trier.springvespertino.models.Race;
+import br.com.trier.springvespertino.models.Speedway;
 import br.com.trier.springvespertino.models.Team;
 import br.com.trier.springvespertino.models.dto.PilotRaceDTO;
 import br.com.trier.springvespertino.models.dto.PilotRaceTeamDTO;
@@ -85,15 +86,17 @@ public class ReportResource {
 		return ResponseEntity.ok(new PilotRaceTeamDTO(team.getName(), list.size(), list));
 	}
 
-	@GetMapping("/championship-by-speedway/{idSpeedway}")
-	public ResponseEntity<SpeedwayChampionshipDTO> findChampionshipBySpeedway(@PathVariable Integer idSpeedway){
+	@GetMapping("/speedway-by-championship/{idChampionship}")
+	public ResponseEntity<SpeedwayChampionshipDTO> findChampionshipBySpeedway(
+			@PathVariable Integer idChampionship){
 		
-		Championship championship = championshipService.findById(idSpeedway);
+		Championship championship = championshipService.findById(idChampionship);
 		
-		List<RaceDTO> list = raceService.findByChampionshipOrderById(championship).stream()
-				.map(race -> race.toDTO()).toList();
+		List<Speedway> list = raceService.findByChampionshipOrderById(championship).stream()
+				.map(r -> r.getSpeedway())
+				.toList();
 		
 		return ResponseEntity.ok(new SpeedwayChampionshipDTO(championship.getDescription(),
-				championship.getYear(), list));
+				list.size(), list));
 	}
 }

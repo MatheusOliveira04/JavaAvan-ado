@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PilotRaceTeamDTO {
 
-	private String equipe;
+	private String team;
 	private Integer raceSize;
 	private List<PilotRaceDTO> races;
 }

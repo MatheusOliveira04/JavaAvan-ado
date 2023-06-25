@@ -16,22 +16,22 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode (of = "id")
-@Entity(name = "usuario")
+@Entity(name = "users")
 public class User {
 
 	@Setter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_usuario")
+	@Column(name = "id_user")
 	private Integer id;
 	
-	@Column(name = "usuario_nome")
+	@Column(name = "name_user")
 	private String name;
 	
-	@Column (name = "usuario_email", unique = true)
+	@Column (name = "email_user", unique = true)
 	private String email;
 	
-	@Column(name = "usuario_senha")
+	@Column(name = "password_user")
 	private String password;
 	
 	public User(UserDTO dto) {

@@ -38,14 +38,14 @@ public class ChampionshipServiceImpl implements ChampionshipService{
 	@Override
 	public Championship findById(Integer id) {
 		Optional<Championship> c = repository.findById(id);
-		return c.orElseThrow(() -> new ObjectNotFound("id: %s não encontrado".formatted(id)));
+		return c.orElseThrow(() -> new ObjectNotFound("campeonato id: %s não encontrado".formatted(id)));
 	}
 
 	@Override
 	public List<Championship> findAll() {
 		List<Championship> list = repository.findAll();
 		if(list.isEmpty()) {
-			throw new ObjectNotFound("Nenhum Championship encontrado");
+			throw new ObjectNotFound("Nenhum campeonato encontrado");
 		}
 		return list;
 	}
@@ -67,7 +67,8 @@ public class ChampionshipServiceImpl implements ChampionshipService{
 	public List<Championship> findByYearBetween(Integer yearBefore, Integer yearAfter) {
 		List<Championship> list = repository.findByYearBetween(yearBefore, yearAfter);
 		if(list.isEmpty()) {
-			throw new ObjectNotFound("Nenhum Championship encontrado");
+			throw new ObjectNotFound("Nenhum campeonato encontrado entre %s e %s"
+					.formatted(yearBefore, yearAfter));
 		}
 		return list;
 	}

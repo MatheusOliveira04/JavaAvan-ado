@@ -26,7 +26,7 @@ public class TeamServiceTest extends BaseTests{
 	TeamService service;
 
 	@Test
-	@DisplayName("Teste buscar Team por id")
+	@DisplayName("Teste buscar time por id")
 	@Sql({"classpath:/resources/sqls/team.sql"})
 	void findByIdTest() {
 		var team = service.findById(1);
@@ -36,15 +36,15 @@ public class TeamServiceTest extends BaseTests{
 	}
 	
 	@Test
-	@DisplayName("Teste buscar Team por id não existe")
+	@DisplayName("Teste buscar time por id não existe")
 	@Sql({"classpath:/resources/sqls/team.sql"})
 	void findByIdNonExist() {
 		var exception = assertThrows(ObjectNotFound.class,() -> service.findById(10));
-		assertEquals("id: 10 não existe", exception.getMessage());
+		assertEquals("Id: 10 do time não encontrado", exception.getMessage());
 	}
 	
 	@Test
-	@DisplayName("Teste buscar todos Team")
+	@DisplayName("Teste buscar todos times")
 	@Sql({"classpath:/resources/sqls/team.sql"})
 	void listAllTest() {
 		List<Team> list = service.findAll();
@@ -52,15 +52,15 @@ public class TeamServiceTest extends BaseTests{
 	}
 	
 	@Test
-	@DisplayName("Teste buscar todos Team não cadastrados")
+	@DisplayName("Teste buscar todos times não cadastrados")
 	void listAllNonExistTest() {
 		var exception = assertThrows(ObjectNotFound.class, () -> service.findAll());
-		assertEquals("Nenhum team encontrado", exception.getMessage());
+		assertEquals("Nenhum time encontrado", exception.getMessage());
 	}
 	
 	
 	@Test
-	@DisplayName("Teste inserir Team")
+	@DisplayName("Teste inserir times")
 	void insertTest() {
 		var team = new Team(1, "insert");
 		service.insert(team);
@@ -73,7 +73,7 @@ public class TeamServiceTest extends BaseTests{
 	}
 	
 	@Test
-	@DisplayName("Teste inserir Team name duplicado")
+	@DisplayName("Teste inserir times com nomes duplicado")
 	@Sql({"classpath:/resources/sqls/team.sql"})
 	void insertNameAlreadyExist() {
 		Team team = new Team(3, "Equipe 1");
@@ -82,7 +82,7 @@ public class TeamServiceTest extends BaseTests{
 	}
 	
 	@Test
-	@DisplayName("Teste atualizar Team")
+	@DisplayName("Teste atualizar time")
 	@Sql({"classpath:/resources/sqls/team.sql"})
 	void updateTest() {
 		var team = new Team(1, "update");
@@ -95,16 +95,16 @@ public class TeamServiceTest extends BaseTests{
 	}
 	
 	@Test
-	@DisplayName("Teste atualizar Team id não existe")
+	@DisplayName("Teste atualizar time id não existe")
 	@Sql({"classpath:/resources/sqls/team.sql"})
 	void updateIdNonExistTest() {
 		Team team = new Team(10, "update");
 		var exception = assertThrows(ObjectNotFound.class, () -> service.update(team));
-		assertEquals("id: 10 não existe", exception.getMessage());
+		assertEquals("Id: 10 do time não encontrado", exception.getMessage());
 	}
 	
 	@Test
-	@DisplayName("Teste atualizar Team name duplicado")
+	@DisplayName("Teste atualizar time com nomes duplicado")
 	@Sql({"classpath:/resources/sqls/team.sql"})
 	void updateNameAlreadyExistTest() {
 		Team team = new Team(2, "Equipe 1");
@@ -113,7 +113,7 @@ public class TeamServiceTest extends BaseTests{
 	}
 	
 	@Test
-	@DisplayName("Teste remove Team")
+	@DisplayName("Teste remover time")
 	@Sql({"classpath:/resources/sqls/team.sql"})
 	void deleteTest() {
 		List<Team> list = service.findAll();
@@ -124,11 +124,11 @@ public class TeamServiceTest extends BaseTests{
 	}
 	
 	@Test
-	@DisplayName("Teste remover Team id não existente")
+	@DisplayName("Teste remover time com id não existente")
 	@Sql({"classpath:/resources/sqls/team.sql"})
 	void deleteIdNonExist() {
 		var exception = assertThrows(ObjectNotFound.class,() -> service.delete(10));
-		assertEquals("id: 10 não existe", exception.getMessage());
+		assertEquals("Id: 10 do time não encontrado", exception.getMessage());
 	}
 	
 	@Test

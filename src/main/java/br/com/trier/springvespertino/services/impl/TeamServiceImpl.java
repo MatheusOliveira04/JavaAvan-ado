@@ -34,14 +34,14 @@ public class TeamServiceImpl implements TeamService{
 	@Override
 	public Team findById(Integer id) {
 		Optional<Team> team = repository.findById(id);
-		return team.orElseThrow(() -> new ObjectNotFound("id: %s não existe".formatted(id)));
+		return team.orElseThrow(() -> new ObjectNotFound("Id: %s do time não encontrado".formatted(id)));
 	}
 
 	@Override
 	public List<Team> findAll() {
 		List<Team> list = repository.findAll();
 		if(list.isEmpty()) {
-			throw new ObjectNotFound("Nenhum team encontrado");
+			throw new ObjectNotFound("Nenhum time encontrado");
 		}
 		return list;
 	}

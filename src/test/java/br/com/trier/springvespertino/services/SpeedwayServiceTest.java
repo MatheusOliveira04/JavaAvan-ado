@@ -80,7 +80,7 @@ public class SpeedwayServiceTest extends BaseTests{
 	}
 
 	@Test
-	@DisplayName("Teste inserir speedway com size inválido")
+	@DisplayName("Teste inserir pista com tamanho inválido")
 	void insertWithCountryNull() {
 		Speedway sp = new Speedway(1, "insert" , 0, new Country(1, "insert"));
 		var exception = assertThrows(IntegrityViolation.class, () -> service.insert(sp));
@@ -88,12 +88,12 @@ public class SpeedwayServiceTest extends BaseTests{
 	}
 	
 	@Test
-	@DisplayName("Teste inserir com country inválido")
+	@DisplayName("Teste inserir com país inválido")
 	@Sql({"classpath:/resources/sqls/country.sql"})
 	void insertInvalidCountry() {
 		Speedway sp = new Speedway(1, "Argentina" , 100, null);
 		var exception = assertThrows(IntegrityViolation.class, () -> service.insert(sp));
-		assertEquals("Country está null", exception.getMessage());
+		assertEquals("País da pista está nulo", exception.getMessage());
 	}
 	
 	@Test
@@ -114,7 +114,7 @@ public class SpeedwayServiceTest extends BaseTests{
 	}
 	
 	@Test
-	@DisplayName("Teste atualizar com size inválido")
+	@DisplayName("Teste atualizar com tamanho inválido")
 	@Sql({"classpath:/resources/sqls/country.sql"})
 	@Sql({ "classpath:/resources/sqls/speedway.sql" })
 	void updateInvalidSize() {
@@ -124,13 +124,13 @@ public class SpeedwayServiceTest extends BaseTests{
 	}
 	
 	@Test
-	@DisplayName("Teste atualizar com country inválido")
+	@DisplayName("Teste atualizar com país inválido")
 	@Sql({"classpath:/resources/sqls/country.sql"})
 	@Sql({"classpath:/resources/sqls/speedway.sql" })
 	void updateInvalidCountry() {
 		Speedway sp = new Speedway(1, "update" , 100, null);
 		var exception = assertThrows(IntegrityViolation.class, () -> service.update(sp));
-		assertEquals("Country está null", exception.getMessage());
+		assertEquals("País da pista está nulo", exception.getMessage());
 	}
 	
 	@Test
@@ -174,7 +174,7 @@ public class SpeedwayServiceTest extends BaseTests{
 	}
 
 	@Test
-	@DisplayName("Teste buscar que está entre size")
+	@DisplayName("Teste buscar que está entre tamanho")
 	@Sql({"classpath:/resources/sqls/country.sql"})
 	@Sql({ "classpath:/resources/sqls/speedway.sql"})
 	void findBySizeBetween() {
@@ -183,7 +183,7 @@ public class SpeedwayServiceTest extends BaseTests{
 	}
 	
 	@Test
-	@DisplayName("Teste buscar que está entre size sem cadastro")
+	@DisplayName("Teste buscar que está entre tamanho sem cadastro")
 	@Sql({"classpath:/resources/sqls/country.sql"})
 	@Sql({ "classpath:/resources/sqls/speedway.sql"})
 	void findBySizeBetweenIsEmpty() {
@@ -193,7 +193,7 @@ public class SpeedwayServiceTest extends BaseTests{
 	}
 	
 	@Test
-	@DisplayName("Teste buscar que está entre size")
+	@DisplayName("Teste buscar por país")
 	@Sql({"classpath:/resources/sqls/country.sql"})
 	@Sql({ "classpath:/resources/sqls/speedway.sql"})
 	void findByCountry() {
@@ -203,7 +203,7 @@ public class SpeedwayServiceTest extends BaseTests{
 	}
 	
 	@Test
-	@DisplayName("Teste buscar que está entre size sem cadastro")
+	@DisplayName("Teste buscar por país sem cadastro")
 	@Sql({"classpath:/resources/sqls/country.sql"})
 	@Sql({ "classpath:/resources/sqls/speedway.sql"})
 	void findByCountryIsEmpty() {

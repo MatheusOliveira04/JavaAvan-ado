@@ -21,21 +21,21 @@ public class CountryServiceImpl implements CountryService{
 	private void nameIsUnique(Country country) {
 		Country busca = repository.findByNameIgnoreCase(country.getName());
 		if(busca != null && busca.getId() != country.getId()) {
-			throw new IntegrityViolation("Nome %s já existe".formatted(country.getName()));
+			throw new IntegrityViolation("Nome %s já existe no país".formatted(country.getName()));
 		}
 	}
 	
 	@Override
 	public Country findById(Integer id) {
 		Optional<Country> country = repository.findById(id);
-		return country.orElseThrow(() -> new ObjectNotFound("id: %s não encontrado".formatted(id)));
+		return country.orElseThrow(() -> new ObjectNotFound("id: %s do país não encontrado".formatted(id)));
 	}
 
 	@Override
 	public List<Country> findAll() {
 		List<Country> list = repository.findAll();
 		if(list.isEmpty()) {
-			throw new ObjectNotFound("Nenhum Country encontrado");
+			throw new ObjectNotFound("Nenhum país encontrado");
 		}
 		return list;
 	}
@@ -61,10 +61,10 @@ public class CountryServiceImpl implements CountryService{
 	
 
 	@Override
-	public List<Country> findByNameContainingIgnoreCase(String countains) {
-		List<Country> list = repository.findByNameContainingIgnoreCase(countains);
+	public List<Country> findByNameContainingIgnoreCase(String contains) {
+		List<Country> list = repository.findByNameContainingIgnoreCase(contains);
 		if(list.isEmpty()) {
-			throw new ObjectNotFound("Nenhum Country encontrado");
+			throw new ObjectNotFound("Nenhum país encontrado que contém %s".formatted(contains));
 		}
 		return list;
 	}

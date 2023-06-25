@@ -47,9 +47,10 @@ public class UserServiceTest extends BaseTests{
 	
 	@Test
 	@DisplayName("Teste inserir usuário com email duplicado")
-	@Sql({"classpath:/resources/sqls/usuario.sql"})
 	void insertUserDuplicatedEmailTest() {
-		var user = new User(3, "Marcos" ,"User1@gmail.com", "12355");
-		var exception = assertThrows(IntegrityViolation.class,() -> service.insert(user));
+		var user = new User(1, "Marcos" ,"User1@gmail.com", "12355");
+		service.insert(user);
+		var user2 = new User(2, "Lucas" ,"User1@gmail.com", "17777");
+		var exception = assertThrows(IntegrityViolation.class,() -> service.insert(user2));
 	}
 }
