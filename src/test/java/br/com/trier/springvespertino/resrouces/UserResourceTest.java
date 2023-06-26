@@ -23,6 +23,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
 import br.com.trier.springvespertino.SpringVespertinoApplication;
+import br.com.trier.springvespertino.config.jwt.LoginDTO;
 import br.com.trier.springvespertino.models.dto.UserDTO;
 
 @ActiveProfiles("test")
@@ -45,6 +46,31 @@ public class UserResourceTest {
 	}
 	
 	@Test
+	@DisplayName("Obter Token")
+	@Sql({"classpath:/resources/sqls/limpa_tabelas.sql"})
+	@Sql({"classpath:/resources/sqls/usuario.sql"})
+	public void getToken() {
+		LoginDTO loginDTO = new LoginDTO("User1@gmail.com", "111");
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<LoginDTO> requestEntity = new HttpEntity<>(loginDTO, headers);
+		ResponseEntity<String> responseEntity = rest.exchange(
+				"/auth/token", 
+				HttpMethod.POST,  
+				requestEntity,    
+				String.class   
+				);
+		assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
+		String token = responseEntity.getBody();
+		System.out.println("****************"+token);
+		headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.setBearerAuth(token);
+		ResponseEntity<List<UserDTO>> response =  rest.exchange("/users", HttpMethod.GET, null,new ParameterizedTypeReference<List<UserDTO>>() {} , headers);
+		assertEquals(response.getStatusCode(), HttpStatus.OK);
+	}
+	
+	@Test
 	@DisplayName("Buscar por id")
 	public void testGetOk() {
 		ResponseEntity<UserDTO> response = getUser("/usuarios/1");
@@ -64,7 +90,7 @@ public class UserResourceTest {
 	@DisplayName("Cadastrar usuário")
 	@Sql({"classpath:/resources/sqls/limpa_tabelas.sql"})
 	public void testCreateUser() {
-		UserDTO dto = new UserDTO(null, "nome", "email", "senha");
+		UserDTO dto = new UserDTO(null, "nome", "email", "senha", "ADMIN");
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<UserDTO> requestEntity = new HttpEntity<>(dto, headers);

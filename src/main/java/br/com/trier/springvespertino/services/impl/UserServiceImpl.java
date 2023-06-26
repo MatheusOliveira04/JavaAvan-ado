@@ -3,6 +3,7 @@ package br.com.trier.springvespertino.services.impl;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +20,8 @@ public class UserServiceImpl implements UserService{
 	private UserRepository repository;
 	
 	private void findByEmail(User user) {
-		User busca = repository.findByEmail(user.getEmail());
-		if(busca != null && busca.getId() != user.getId()) {
+		Optional<User> busca = repository.findByEmail(user.getEmail());
+		if(busca.isPresent() && busca.get().getId() != user.getId()) {
 			throw new IntegrityViolation("Email já existe %s".formatted(user.getEmail()));
 		}
 	}
@@ -62,11 +63,29 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public List<User> findBynameStartingWithIgnoreCase(String name) {
-		List<User> list = repository.findBynameStartingWithIgnoreCase(name);
+		List<User> list = repository.findByNameStartingWithIgnoreCase(name);
 		if(list.isEmpty()) {
 			throw new ObjectNotFound("Nenhum nome de usúario contém %s".formatted(name));
 		}
 		return list;
+	}
+
+	@Override
+	public Optional<User> findByEmail(String email) {
+		Optional<User> user = repository.findByEmail(email);
+		if(user.isPresent()) {
+			return user;
+		}
+		throw new ObjectNotFound("Nenhum email: %s encontrado no usuario".formatted(email));
+	}
+
+	@Override
+	public Optional<User> findByName(String name) {
+		Optional<User> user = repository.findByName(name);
+		if(user.isPresent()) {
+			return user;
+		}
+		throw new ObjectNotFound("Nenhum nome: %s encontrado no usuario".formatted(name));
 	}
 
 }

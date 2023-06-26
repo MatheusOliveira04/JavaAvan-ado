@@ -80,6 +80,7 @@ public class ReportResourceTest {
 	
 	@Test
 	@DisplayName("Teste buscar todas corrida em um campeonato")
+	@Sql({"classpath:/resources/sqls/championship.sql"})
 	void findChampionshipByRace() {
 		ResponseEntity<SpeedwayChampionshipDTO> re = rest
 				.getForEntity("/findBy/speedway-by-championship/1", SpeedwayChampionshipDTO.class);
