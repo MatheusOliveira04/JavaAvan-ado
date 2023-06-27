@@ -25,9 +25,6 @@ public class JwtResourceTest {
 	@Autowired
 	TestRestTemplate rest;
 	
-	
-	
-	
 	@Test
 	@DisplayName("Obter Token")
 	@Sql({"classpath:/resources/sqls/usuario.sql"})

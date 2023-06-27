@@ -1,6 +1,6 @@
 INSERT INTO users
 (id_user, name_user, email_user, password_user, permissoes_user)
-VALUES(3,'User 1','User1@gmail.com', '111', 'ADMIN');
+VALUES(3,'User 1','User1@gmail.com', '111', 'ADMIN,USER');
 
 INSERT INTO users
 (id_user, name_user, email_user, password_user, permissoes_user)
