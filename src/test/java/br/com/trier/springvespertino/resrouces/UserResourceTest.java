@@ -47,7 +47,7 @@ public class UserResourceTest {
 	private ResponseEntity<List<UserDTO>> getUsers(String url) {
 		return rest.exchange(url,
 				HttpMethod.GET, 
-				new HttpEntity(getHeaders("User1@gmail.com", "111")), 
+				new HttpEntity<>(getHeaders("User1@gmail.com", "111")), 
 				new ParameterizedTypeReference<List<UserDTO>>() {} );
 	}
 	

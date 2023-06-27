@@ -146,7 +146,7 @@ public class UserServiceTest extends BaseTests{
 		assertEquals(3, user.get().getId());
 		assertEquals("User 1", user.get().getName());
 		assertEquals("111", user.get().getPassword());
-		assertEquals("ADMIN", user.get().getRoles());
+		assertEquals("ADMIN,USER", user.get().getRoles());
 	}
 	
 	@Test
@@ -167,7 +167,7 @@ public class UserServiceTest extends BaseTests{
 		assertEquals("User 1", user.get().getName());
 		assertEquals("User1@gmail.com", user.get().getEmail());
 		assertEquals("111", user.get().getPassword());
-		assertEquals("ADMIN", user.get().getRoles());
+		assertEquals("ADMIN,USER", user.get().getRoles());
 	}
 	
 	@Test

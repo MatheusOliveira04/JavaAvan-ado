@@ -2,7 +2,6 @@ package br.com.trier.springvespertino.resrouces;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
@@ -24,6 +23,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
 import br.com.trier.springvespertino.SpringVespertinoApplication;
+import br.com.trier.springvespertino.config.jwt.LoginDTO;
 import br.com.trier.springvespertino.models.Championship;
 
 @ActiveProfiles("test")
@@ -36,9 +36,35 @@ public class ChampionshipResourceTest {
 	protected TestRestTemplate rest;
 	
 	private ResponseEntity<Championship> getChampionship(String url){
-		return rest.getForEntity(url, Championship.class);
+		return rest.exchange(url, HttpMethod.GET,
+				new HttpEntity<>(getHeaders("User1@gmail.com","111")),
+				Championship.class);
 	}
 	
+	private ResponseEntity<List<Championship>> getListChampionship(String url){
+		return rest.exchange(url, HttpMethod.GET,
+				new HttpEntity<>(getHeaders("User1@gmail.com","111")),
+				new ParameterizedTypeReference<List<Championship>>() {} );
+	}
+	
+	
+	
+	private HttpHeaders getHeaders(String email, String senha) {
+		LoginDTO loginDTO = new LoginDTO(email, senha);
+		HttpHeaders header = new HttpHeaders();
+		header.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<LoginDTO> request = new HttpEntity<>(loginDTO, header);
+		ResponseEntity<String> responseEntity = rest.exchange(
+				"/auth/token", HttpMethod.POST,
+				request, String.class);
+		assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
+		HttpHeaders headersReturn = new HttpHeaders();
+		headersReturn.setBearerAuth(responseEntity.getBody());
+		return headersReturn;
+	}
+
+
+
 	@Test
 	@DisplayName("Busca por id")
 	void findByIdTest() {
