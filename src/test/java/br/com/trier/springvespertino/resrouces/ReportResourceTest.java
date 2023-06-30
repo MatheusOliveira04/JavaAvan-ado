@@ -29,6 +29,8 @@ public class ReportResourceTest {
 	
 	@Test
 	@DisplayName("Teste buscar corrida por país e ano")
+	@Sql({"classpath:/resources/sqls/limpa_tabelas.sql"})
+	@Sql({"classpath:/resources/sqls/usuario.sql"})
 	@Sql({"classpath:/resources/sqls/country.sql"})
 	@Sql({"classpath:/resources/sqls/speedway.sql"})
 	@Sql({"classpath:/resources/sqls/championship.sql"})
@@ -43,6 +45,7 @@ public class ReportResourceTest {
 	
 	@Test
 	@DisplayName("Teste buscar corrida por país e ano, ano não encontrado ")
+	
 	void FindRaceByYearNotFound() {
 		ResponseEntity<RaceCountryYearDTO> re = rest
 				.getForEntity("/findBy/races-by-country-year/2/2015", RaceCountryYearDTO.class);
@@ -59,6 +62,8 @@ public class ReportResourceTest {
 	
 	@Test
 	@DisplayName("Teste buscar corrida por time")
+	@Sql({"classpath:/resources/sqls/limpa_tabelas.sql"})
+	@Sql({"classpath:/resources/sqls/usuario.sql"})
 	@Sql({	"classpath:/resources/sqls/team.sql"})
 	@Sql({	"classpath:/resources/sqls/pilot.sql"})
 	@Sql({"classpath:/resources/sqls/pilot_race.sql"})
@@ -80,6 +85,7 @@ public class ReportResourceTest {
 	
 	@Test
 	@DisplayName("Teste buscar todas corrida em um campeonato")
+	@Sql({"classpath:/resources/sqls/usuario.sql"})
 	@Sql({"classpath:/resources/sqls/championship.sql"})
 	void findChampionshipByRace() {
 		ResponseEntity<SpeedwayChampionshipDTO> re = rest
